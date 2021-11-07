@@ -6,10 +6,9 @@
     <title>Register - Phil's Soko</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Lato: 100,300,400,700|Luckiest+Guy|Oxygen:300,400" rel="stylesheet">
-
+    <script src="<?= base_url('/scripts/register.js') ?>"></script>
     <link href="<?= base_url('/css/register.css') ?>" type="text/css" rel="stylesheet">
     <style>
         html,
@@ -35,11 +34,6 @@
         <li style="float: right;"><a href="<?= base_url('login') ?>">login</a></li>
     </ul>
 
-    <?php
-    # if (isset($_REQUEST)) {
-
-    # if (isset($_REQUEST['error'])) { 
-    ?>
     <div class="w3-display-container w3-container w3-red w3-section" style="margin: auto; width: 60%; display: none;" id="reg-failed-msg">
         <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
         <h3>Registration Failed</h3>
@@ -51,9 +45,7 @@
         <h3>Registration Failed</h3>
         <p>Email already exists...</p>
     </div>
-    <?php # }
-    # } 
-    ?>
+
     <?php if (isset($validation)) : ?>
         <div class="w3-display-container w3-container w3-red w3-section" style="margin: auto; width: 60%;">
             <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
@@ -108,9 +100,6 @@
                     <option value="male" selected>Male</option>
                     <option value="female">Female</option>
                 </select>
-                <!-- <input class="w3-input" type="text" name="user-type" value="User" id="user_types" disabled /> -->
-
-                <!-- <button class="w3-button w3-center w3-teal w3-section" type="submit" name="register-user">Register</button> -->
 
             </form>
             <button class="w3-button w3-center w3-margin-left w3-teal w3-hover-black w3-section" name="Login" onclick="registerUser()">Login</button>
@@ -122,61 +111,7 @@
         </div>
 
         <script>
-            function registerUser() {
-                var fname = $("#first-name").val();
-                var lname = $("#last-name").val();
-                var email = $('#emailaddress').val();
-                var pass1 = $("#password1").val();
-                var pass2 = $("#password2").val();
-                var gender = $('#genders').val();
 
-                $("#fNameResult").hide();
-                $("#lNameResult").hide();
-                $("#emailResult").hide();
-                $("#passResult").hide();
-                $("#pass2Result").hide();
-                $("#reg-failed-msg").hide();
-                $("#email-msg").hide();
-
-                if (fname == '' || lname == '' || email == '' || pass1 == '' || pass2 == '') {
-                    if (fname == '')
-                        $('#fNameResult').show().text("* First Name field is empty")
-                    if (lname == '')
-                        $('#lNameResult').show().text("* Last Name field is empty")
-                    if (email == '')
-                        $('#emailResult').show().text("* Email field is empty")
-                    if (pass1 == '')
-                        $('#passResult').show().text("* First Password field is empty")
-                    if (pass2 == '')
-                        $('#pass2Result').show().text("* Second Password field is empty")
-
-                    return;
-                }
-
-                if (pass1 != pass2) {
-                    $('#passResult').show().text("*")
-                    $('#pass2Result').show().text("* Passwords Don't Match")
-                    return;
-                }
-
-                $.ajax({
-                    url: 'http://localhost:8080/regCheck/' + email + '/' + fname + '/' + lname + '/' + pass1 + '/' + gender,
-                    success: function(result) {
-                        console.log(result, result.message)
-                        if (result.message == 'Registration Failed')
-                            $('#reg-failed-msg').show();
-                        else if (result.message == 'Not a valid email')
-                            $('#emailResult').show().text("* " + result.message)
-                        else if (result.message == 'Email already exists')
-                            $('#email-msg').show()
-                        else {
-                            window.location.href = "http://localhost:8080/homepage";
-                        }
-
-                        // $('#emailResult').show().text(result.message)
-                    }
-                })
-            }
         </script>
     </main>
 
@@ -186,8 +121,3 @@
 </body>
 
 </html>
-
-<!-- dog is
-dog is
-
-moo => cow well-fed
