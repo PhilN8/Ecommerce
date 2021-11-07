@@ -1,5 +1,4 @@
 $(function() {
-    // $('#category-dropdown').empty()
     $.ajax({
         url: "http://localhost:8080/Admin/getCategories",
         success: function(result) {
@@ -183,4 +182,61 @@ function changeOpt() {
         $('#gender-option').prop('disabled', true);
         $('#new-val').prop('disabled', false);
     }
+}
+
+function newProduct() {
+    var product = $('#product-name').val();
+    var subcategory_id = $('#subcategory-dropdown').val()
+    var desc = $('#product-desc').val()
+    var price = parseFloat(parseFloat($('#price').val()).toFixed(2))
+
+    $('#product-msg').hide()
+    $('#prodResult').hide()
+
+    $.ajax({
+        url: 'http://localhost:8080/Admin/newProduct/' + product + '/' + desc + '/' + subcategory_id + '/' + price,
+        success: function(result) {
+            if (result.message == 1)
+                $('#prodResult').show().text("* Product already exists");
+            else if (result.message == 2)
+                $('#prodResult').show().text("* Error: Addition failed...");
+            else
+                $('#product-msg').show();
+        },
+        error: function() {
+            $('#prodResult').show().text("* Error: Addition failed...");
+        }
+    });
+}
+
+function editUser() {
+    var id = $('#edit-user').val()
+    var option = $('#edit-option').val()
+    var new_value = ''
+
+    $('#edit-fail').hide()
+    $('#edit-msg').hide()
+    $('#valResult').hide()
+
+    if (option == 'gender')
+        new_value = $('#gender-option').val()
+    else
+        new_value = $('#new-val').val()
+
+    $.ajax({
+        url: 'http://localhost:8080/Admin/editUser/' + option + '/' + id + '/' + new_value,
+        success: function(result) {
+            if (result.message == 2)
+                $('#edit-fail').show()
+            else if (result.message == 3)
+                $('#valResult').show().text("* Not a valid email")
+            else if (result.message == 4)
+                $('#valResult').show().text("* Email already in use...")
+            else
+                $('#edit-msg').show()
+        },
+        error: function() {
+            $('#edit-fail').show()
+        }
+    })
 }
