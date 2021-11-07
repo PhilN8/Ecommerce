@@ -117,7 +117,6 @@
 
     <p class="foot-note">&#169; 2021 Phil Nyaga . All rights reserved</p>
 
-
 </body>
 
 </html>
