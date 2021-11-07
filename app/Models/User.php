@@ -48,6 +48,14 @@ class User extends Model
             return false;
     }
 
+    public function editUser(array $newValue, int $id): bool
+    {
+        if ($this->update($id, $newValue) == true)
+            return true;
+
+        return false;
+    }
+
     public function deleteUser(int $id)
     {
 

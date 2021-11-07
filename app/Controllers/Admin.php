@@ -8,8 +8,6 @@ use App\Models\User;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\SubCategory;
-use DateTimeZone;
-use PhpParser\Node\Expr\Cast\Double;
 
 class Admin extends BaseController
 {
@@ -38,6 +36,40 @@ class Admin extends BaseController
 
 
         return $this->response->setJSON($allUsers);
+    }
+
+    public function editUser(string $option, int $id, string $val)
+    {
+
+        $user = new User();
+
+        $new_val = [
+            '' . $option . '' => $val
+        ];
+
+        if ($option == 'email') {
+            if (!filter_var($val, FILTER_VALIDATE_EMAIL)) {
+                $string = ['message' => 3];
+                return $this->response->setJSON($string);
+            }
+
+            $check = $user->where('email', $val)->first();
+            if ($check) {
+                $string = ['message' => 4];
+                return $this->response->setJSON($string);
+            }
+        }
+
+
+
+        $isDone = $user->editUser($new_val, $id);
+
+        if ($isDone)
+            $string = ['message' => 2];
+        else
+            $string = ['message' => 1];
+
+        return $this->response->setJSON($string);
     }
 
     # CATEGORIES

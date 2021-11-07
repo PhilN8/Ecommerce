@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\UserModel;
+use App\Models\User;
 
 class Registration extends BaseController
 {
@@ -15,7 +15,7 @@ class Registration extends BaseController
     {
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
-            $userModel = new UserModel();
+            $userModel = new User();
 
             $check = $userModel->where('email', $email)->first();
 

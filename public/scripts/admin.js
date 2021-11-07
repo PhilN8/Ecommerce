@@ -138,7 +138,8 @@ function newSub() {
     })
 }
 
-function loadTable(role) {
+function loadTable(role, place) {
+    $('#all-users').empty()
     $('#users').hide()
     $('#users-table').hide().empty()
     $(function() {
@@ -146,8 +147,12 @@ function loadTable(role) {
             url: "http://localhost:8080/Admin/viewUsers" + "/" + role,
             success: function(result) {
                 $.each(result, function(x, i) {
-                    $('#users').fadeIn()
-                    $('#users-table').fadeIn().append('<tr><td>' + i.user_id + '</td><td>' + i.first_name + '</td><td>' + i.last_name + '</td><td>' + i.email + '</td></tr>');
+                    if (place == 0){
+                        $('#users').fadeIn()
+                        $('#users-table').fadeIn().append('<tr><td>' + i.user_id + '</td><td>' + i.first_name + '</td><td>' + i.last_name + '</td><td>' + i.email + '</td></tr>');
+                    } else {
+                        $('#all-users').append('<option value="'+ i.user_id +'">' + i.first_name + " " + i.last_name + "</option>")
+                    }
                 })
             }
         });
@@ -166,4 +171,16 @@ function loadSubs() {
             })
         }
     });
+}
+
+function changeOpt() {
+    var option = $('#edit-option').val()
+
+    if (option == 'gender') {
+        $('#gender-option').prop('disabled', false);
+        $('#new-val').prop('disabled', true);
+    } else {
+        $('#gender-option').prop('disabled', true);
+        $('#new-val').prop('disabled', false);
+    }
 }

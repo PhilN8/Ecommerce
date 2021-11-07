@@ -46,7 +46,8 @@ ini_set('display_errors', '1');
         <h5 class="w3-bar-item w3-black" style="margin-top: 0; margin-bottom: 0;">Users</h5>
         <button class="w3-bar-item w3-button tablinks w3-blue" onclick="showSection(event, 'intro', 'tablinks', 'admin-section', ' w3-blue')">Home</button>
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'new-admin-section', 'tablinks', 'admin-section', ' w3-blue')">Add an Admin</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'view-users-section', 'tablinks', 'admin-section', ' w3-blue'); loadTable(0)">View Users</button><br>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'view-users-section', 'tablinks', 'admin-section', ' w3-blue'); loadTable(0, 0)">View Users</button>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'edit-users-section', 'tablinks', 'admin-section', ' w3-blue'); loadTable(0, 1)">Edit Users</button><br>
 
         <h5 class="w3-bar-item w3-black" style="margin-bottom: 0;">Clothes</h5>
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'category-section', 'tablinks', 'admin-section', ' w3-blue')">Add New Category</button>
@@ -62,6 +63,8 @@ ini_set('display_errors', '1');
             <h1>Admin Page</h1>
             <p>Welcome back, <?= $_SESSION['name'] ?></p>
         </section>
+
+        <!-- USERS -->
 
         <section id="new-admin-section" class="admin-section w3-animate-opacity" style="width: 80%; margin: auto; display: none;">
             <!-- <h1>Register a New Admin</h1> -->
@@ -130,9 +133,9 @@ ini_set('display_errors', '1');
 
         <section id="view-users-section" class="admin-section w3-animate-opacity" style="width: 80%; margin: auto; display: none;">
             <h1 style="text-align: center; clear: right;">Users in the Database</h1>
-            <button class="w3-button" onclick="loadTable(1)">Admins</button>
-            <button class="w3-button" onclick="loadTable(2)">Users</button>
-            <button class="w3-button" onclick="loadTable(0)">All</button>
+            <button class="w3-button" onclick="loadTable(1, 0)">Admins</button>
+            <button class="w3-button" onclick="loadTable(2, 0)">Users</button>
+            <button class="w3-button" onclick="loadTable(0, 0)">All</button>
             <table class="user-table" id="users">
                 <thead>
                     <th>User ID</th>
@@ -144,6 +147,51 @@ ini_set('display_errors', '1');
                 </tbody>
             </table>
         </section>
+
+        <section id="edit-users-section" class="admin-section w3-animate-opacity" style="width: 80%; margin: auto; display: none;" onblur="document.getElementById('editForm').reset()">
+            <div class="w3-display-container w3-container w3-green w3-section" style="display: none;" id="edit-fail">
+                <span onclick="this.parentElement.style.display='none'; document.getElementById('editForm').reset()" class="w3-button w3-large w3-display-topright">&times;</span>
+                <h3>Edit Successful</h3>
+                <!-- <p>Try again...</p> -->
+            </div>
+
+            <div class="w3-display-container w3-container w3-red w3-section" style="display: none;" id="edit-msg">
+                <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+                <h3>Edit Failed</h3>
+                <p>Try again...</p>
+            </div>
+
+            <h1>Edit Users</h1>
+            <form action="" id="editForm">
+                <label for="edit-user">Choose User</label>
+                <input type="text" class="w3-input" list="all-users" id="edit-user">
+                <datalist id="all-users"></datalist><br>
+
+                <label for="edit-option">Choose column to edit</label>
+                <select name="" id="edit-option" class="w3-input" onchange="changeOpt()">
+                    <option value="first_name">First Name</option>
+                    <option value="last_name">Last Name</option>
+                    <option value="email">Email</option>
+                    <option value="password">Password</option>
+                    <option value="gender">Gender</option>
+                </select><br>
+
+                <label for="new-val">New Value</label>
+                <input type="text" placeholder="Enter new value..." id="new-val" class="w3-input">
+                <p id="valResult" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br>
+
+                <label for="gender-option">Enter a new option</label>
+                <select name="" id="gender-option" disabled="disabled" class="w3-input">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </form>
+
+            <button class="w3-button w3-center w3-margin-left w3-teal w3-hover-black w3-section" onclick="editUser()">Complete</button>
+
+        </section>
+
+        <!-- PRODUCTS -->
 
         <section id="category-section" class="admin-section w3-animate-opacity" style="width: 80%; margin: auto; display: none;">
             <div class="w3-display-container w3-container w3-green w3-section" style="display: none;" id="category-msg">
@@ -223,22 +271,6 @@ ini_set('display_errors', '1');
         </section>
 
         <script>
-            // function loadTable(role) {
-            //     $('#users').hide()
-            //     $('#users-table').hide().empty()
-            //     $(function() {
-            //         $.ajax({
-            //             url: "http://localhost:8080/Admin/viewUsers" + "/" + role,
-            //             success: function(result) {
-            //                 $.each(result, function(x, i) {
-            //                     $('#users').fadeIn()
-            //                     $('#users-table').fadeIn().append('<tr><td>' + i.user_id + '</td><td>' + i.first_name + '</td><td>' + i.last_name + '</td><td>' + i.email + '</td></tr>');
-            //                 })
-            //             }
-            //         });
-            //     });
-            // }
-
             function newProduct() {
                 var product = $('#product-name').val();
                 var subcategory_id = $('#subcategory-dropdown').val()
@@ -248,19 +280,8 @@ ini_set('display_errors', '1');
                 $('#product-msg').hide()
                 $('#prodResult').hide()
 
-                const productDetails = [product, subcategory_id, desc, price];
-
-
                 $.ajax({
                     url: 'http://localhost:8080/Admin/newProduct/' + product + '/' + desc + '/' + subcategory_id + '/' + price,
-                    // type: 'POST',
-                    // dataType: 'JSON',
-                    // data: {
-                    //     'product': product,
-                    //     'subcategory_id': subcategory_id,
-                    //     'desc': desc,
-                    //     'price': price
-                    // },
                     success: function(result) {
                         if (result.message == 1)
                             $('#prodResult').show().text("* Product already exists");
@@ -273,6 +294,38 @@ ini_set('display_errors', '1');
                         $('#prodResult').show().text("* Error: Addition failed...");
                     }
                 });
+            }
+
+            function editUser() {
+                var id = $('#edit-user').val()
+                var option = $('#edit-option').val()
+                var new_value = ''
+
+                $('#edit-fail').hide()
+                $('#edit-msg').hide()
+                $('#valResult').hide()
+
+                if (option == 'gender')
+                    new_value = $('#gender-option').val()
+                else
+                    new_value = $('#new-val').val()
+
+                $.ajax({
+                    url: 'http://localhost:8080/Admin/editUser/' + option + '/' + id + '/' + new_value,
+                    success: function(result) {
+                        if (result.message == 2)
+                            $('#edit-fail').show()
+                        else if (result.message == 3)
+                            $('#valResult').show().text("* Not a valid email")
+                        else if (result.message == 4)
+                            $('#valResult').show().text("* Email already in use...")
+                        else
+                            $('#edit-msg').show()
+                    },
+                    error: function() {
+                        $('#edit-fail').show()
+                    }
+                })
             }
         </script>
 
