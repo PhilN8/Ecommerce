@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phil's Soko</title>
     <link href="https://fonts.googleapis.com/css?family=Lato: 100,300,400,700|Luckiest+Guy|Oxygen:300,400" rel="stylesheet">
-
+    <script src="index.js"></script>
     <link rel="stylesheet" href="<?= base_url('/css/index.css') ?>">
     <link rel="stylesheet" href="<?= base_url('/css/w3.css') ?>">
     <style>
@@ -93,24 +93,7 @@
                     <a href="menu.php" class="w3-button w3-black w3-hover-blue">View Catalogue</a>
                 </div>
             </div>
-            <script>
-                var slideIndex = 0;
-                showSlides();
 
-                function showSlides() {
-                    var i;
-                    var slides = document.getElementsByClassName("mySlides");
-                    for (i = 0; i < slides.length; i++) {
-                        slides[i].style.display = "none";
-                    }
-                    slideIndex++;
-                    if (slideIndex > slides.length) {
-                        slideIndex = 1
-                    }
-                    slides[slideIndex - 1].style.display = "block";
-                    setTimeout(showSlides, 3000); // Change image every 3 seconds
-                }
-            </script>
         </div>
 
         <!-- Contact -->
