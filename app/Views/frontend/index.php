@@ -6,15 +6,31 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phil's Soko</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato: 100,300,400,700|Luckiest+Guy|Oxygen:300,400" rel="stylesheet">
+
     <link rel="stylesheet" href="<?= base_url('/css/index.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('/css/w3.css') ?>">
+    <style>
+        html,
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Lato", sans-serif;
+        }
+    </style>
+
 </head>
 
 <body>
     <nav>
         <ul class="navigation" style="margin-top: 0;"><span class="my-name">soko la njue</span>
-            <li><a href="index.php">home</a></li>
-            <li><a href="login.php">login</a></li>
-            <li style="float: right;"><a href="register.php">sign up</a></li>
+            <li><a href="<?= base_url('/css/index.css') ?>">home</a></li>
+            <li><a href="<?= base_url('/login') ?>">login</a></li>
+            <li style="float: right;"><a href="<?= base_url('/register') ?>">sign up</a></li>
         </ul>
     </nav>
 

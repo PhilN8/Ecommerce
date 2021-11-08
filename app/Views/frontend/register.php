@@ -29,7 +29,7 @@
 <body>
     <?php ini_set('display_errors', 1); ?>
     <ul class="navigation" style="margin: 0;"><span class="my-name">SOKO la njue</span>
-        <li><a href="index.php">home</a></li>
+        <li><a href="<?= base_url('/') ?>">home</a></li>
         <li><a href="menu.php">menu</a></li>
         <li style="float: right;"><a href="<?= base_url('login') ?>">login</a></li>
     </ul>
