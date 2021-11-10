@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use App\Models\Wallet;
 
 class Homepage extends BaseController
 {
@@ -15,5 +16,12 @@ class Homepage extends BaseController
             echo view('/frontend/homepage', $_SESSION);
         else
             echo view('frontend/login', $notThere);
+    }
+
+    public function wallet(int $id, int $money)
+    {
+        $wallet = new Wallet();
+
+        $wallet->updateWallet($id, $money);
     }
 }

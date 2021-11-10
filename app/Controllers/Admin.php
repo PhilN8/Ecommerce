@@ -65,9 +65,9 @@ class Admin extends BaseController
         $isDone = $user->editUser($new_val, $id);
 
         if ($isDone)
-            $string = ['message' => 2];
-        else
             $string = ['message' => 1];
+        else
+            $string = ['message' => 2];
 
         return $this->response->setJSON($string);
     }

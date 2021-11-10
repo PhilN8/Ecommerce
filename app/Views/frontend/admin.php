@@ -149,13 +149,13 @@ ini_set('display_errors', '1');
         </section>
 
         <section id="edit-users-section" class="admin-section w3-animate-opacity" style="width: 80%; margin: auto; display: none;" onblur="document.getElementById('editForm').reset()">
-            <div class="w3-display-container w3-container w3-green w3-section" style="display: none;" id="edit-fail">
+            <div class="w3-display-container w3-container w3-green w3-section" style="display: none;" id="edit-msg">
                 <span onclick="this.parentElement.style.display='none'; document.getElementById('editForm').reset()" class="w3-button w3-large w3-display-topright">&times;</span>
                 <h3>Edit Successful</h3>
                 <!-- <p>Try again...</p> -->
             </div>
 
-            <div class="w3-display-container w3-container w3-red w3-section" style="display: none;" id="edit-msg">
+            <div class="w3-display-container w3-container w3-red w3-section" style="display: none;" id="edit-fail">
                 <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
                 <h3>Edit Failed</h3>
                 <p>Try again...</p>

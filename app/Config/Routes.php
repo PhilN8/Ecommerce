@@ -42,6 +42,7 @@ $routes->get('/regCheck/(.+)', 'Registration::regCheck/$1');
 $routes->get('/newCategory/(.+)', 'Admin::newCategory/$1');
 $routes->get('/subcategory/(.+)', 'Admin::newSub/$1');
 $routes->get('/newProduct/(.+)', 'Admin::newProduct');
+$routes->get('/wallet/(:num)/(:num)', 'Homepage::wallet/$1/$1');
 // $routes->match(['get', 'post'], 'frontend/login', 'Form::index');
 
 /*
