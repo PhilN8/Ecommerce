@@ -8,12 +8,14 @@ class Wallet extends Model
 {
 
     protected $table = 'tbl_wallet';
+    protected $primaryKey = 'wallet_id';
 
     protected $allowedFields = [
         'customer_id',
         'amount_available',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'is_deleted'
     ];
 
     protected $useTimestamps = true;
@@ -41,13 +43,13 @@ class Wallet extends Model
     public function updateWallet(int $id, int $money)
     {
 
-        $amount = $this->select('amount_available')->where('customer_id', $id)->first()['amount_available'];
+        $amount = $this->select('amount_available')->where('customer_id', $id)->first()['amount_available'] ?? null;
 
         if ($amount != null) {
             $this->whereIn('customer_id', [$id])
                 ->set('amount_available', $money + $amount)
                 ->update();
-            echo "DONE!" . $money + $amount;
+            echo "DONE! New Amount: " . $money + $amount;
         } else {
             $this->newWallet($id, $money);
             echo "NEW Wallet!";

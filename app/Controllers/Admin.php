@@ -152,7 +152,7 @@ class Admin extends BaseController
             'product_description' => $desc,
             'unit_price' => doubleval($price),
             'subcategory_id' => $sub_id,
-            'created_at' => $date,
+            // 'created_at' => $date,
             'added_by' => $_SESSION['id']
         ];
 

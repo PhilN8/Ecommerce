@@ -7,6 +7,7 @@ use CodeIgniter\Model;
 class Product extends Model
 {
     protected $table = 'tbl_products';
+    protected $primaryKey = 'product_id';
 
     protected $allowedFields = [
         'product_name',
@@ -17,6 +18,11 @@ class Product extends Model
         'created_at',
         'added_by'
     ];
+
+    protected $useTimestamps = true;
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
+    protected $deletedField  = 'is_deleted';
 
     public function checkProduct(string $product, int $sub_id)
     {

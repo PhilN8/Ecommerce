@@ -9,6 +9,7 @@ class User extends Model
 {
 
     protected $table = 'tbl_users';
+    protected $primaryKey = 'user_id';
 
     protected $allowedFields = [
         # 'user_id',
@@ -19,6 +20,8 @@ class User extends Model
         'gender',
         'role'
     ];
+
+    protected $deletedField = 'is_deleted';
 
     public function getUsers(/* $id = false, */int $role = null)
     {
