@@ -34,4 +34,9 @@ class Product extends Model
         else
             return true;
     }
+
+    public function updateProduct()
+    {
+        # code...
+    }
 }

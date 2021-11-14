@@ -23,23 +23,17 @@ class User extends Model
 
     protected $deletedField = 'is_deleted';
 
-    public function getUsers(/* $id = false, */int $role = null)
+    public function getUsers(int $role = null)
     {
-        // if ($id === false) {
-        // }
 
-        if ($role === null || $role == 0) {
-            return $this->select('user_id, first_name, last_name, email')->findAll();
-        }
+        if ($role === null || $role == 0)
+            return $this->select('user_id, first_name, last_name, email')
+                ->findAll();
+
 
         return $this->select('user_id, first_name, last_name, email')
             ->where(['role' => $role])
             ->get()->getResultArray();
-
-
-        // return $this->asArray()
-        //     ->where(['user_id' => $id])
-        //     ->first();
     }
 
     public function createUser(array $newUser)

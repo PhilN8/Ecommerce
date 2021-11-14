@@ -24,4 +24,17 @@ class Homepage extends BaseController
 
         $wallet->updateWallet($id, $money);
     }
+
+    public function getWallet(int $id)
+    {
+        session();
+        $wallet = new Wallet();
+
+        $amount = $wallet->getAmount($id);
+        $_SESSION['wallet'] = $amount;
+    }
+
+    public function editInfo()
+    {
+    }
 }

@@ -38,13 +38,51 @@ class Admin extends BaseController
         return $this->response->setJSON($allUsers);
     }
 
+    public function dynamicSearch(string $searchTerm)
+    {
+        $users = new User();
+        $namesarray = $users->getUsers();
+        $existingname = [];
+
+        // print_r($namesarray);
+
+        foreach ($namesarray as $name) {
+            //Convert the name to be lowercase
+            $Fname = strtolower($name['first_name']);
+
+            //Get the length of the search term. You need to check a name e.g 
+            //if I search Ti, then i want names starting from T then followed by i
+
+            $searchLength = strlen($searchTerm);
+
+            //Get substing of size n e.g. if To is the search term, then get all first letters. Eg in names array, Ti, Ti, Ma, and Ju, 
+            $substringname = substr($Fname, 0, $searchLength);
+
+
+            if (stristr($searchTerm, $substringname)) {
+                //Create the Search hints
+                if (count($existingname) == 0) {
+                    array_push($existingname, $name);
+                } else {
+                    // $existingname .= ", ";
+                    // $existingname .= ucfirst($Fname);
+                    array_push($existingname, $name);
+                }
+            }
+        }
+
+        $string = ['message' => $existingname];
+
+        return $this->response->setJSON($string);
+    }
+
     public function editUser(string $option, int $id, string $val)
     {
 
         $user = new User();
 
         $new_val = [
-            '' . $option . '' => $val
+            $option  => $val
         ];
 
         if ($option == 'email') {

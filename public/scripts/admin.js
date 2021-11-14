@@ -240,3 +240,39 @@ function editUser() {
         }
     })
 }
+
+function dynamicSearch(){
+    var searchTerm = $('#search').val();
+
+    if (searchTerm == '') return;
+
+    var xhttp = new XMLHttpRequest();
+    var url = 'ajaxdynamic.php?search_val='+searchTerm;
+
+    // Get response from server, and process it
+    xhttp.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200) {
+            var result = this.responseText;
+            var resultText = JSON.parse(result);
+            $("#searchresult").text(resultText);
+        }
+    };
+
+    xhttp.open('GET', url, true);
+    xhttp.send();
+
+}
+
+function name() {
+    var searchTerm = $("#edit-user").val()
+
+    $.ajax({
+        url: 'http://localhost:8080/Admin/dynamicSearch/' + searchTerm,
+        success: function(result) {
+            console.log(result)
+        }, 
+        error: function(){
+            console.error();
+        }
+    })
+}

@@ -35,9 +35,14 @@ class Wallet extends Model
 
     public function getAmount(int $id)
     {
-        return $this->select('amount_available')
-            ->where('customer_id', $id)
-            ->first()['amount_available'];
+        $amount = $this->select('amount_available')->where('customer_id', $id)->first()['amount_available'] ?? null;
+
+        if ($amount !== null)
+            return $amount;
+        else {
+            # $this->newWallet($id);
+            return null;
+        }
     }
 
     public function updateWallet(int $id, int $money)
@@ -45,14 +50,11 @@ class Wallet extends Model
 
         $amount = $this->select('amount_available')->where('customer_id', $id)->first()['amount_available'] ?? null;
 
-        if ($amount != null) {
+        if ($amount !== null)
             $this->whereIn('customer_id', [$id])
                 ->set('amount_available', $money + $amount)
                 ->update();
-            echo "DONE! New Amount: " . $money + $amount;
-        } else {
+        else
             $this->newWallet($id, $money);
-            echo "NEW Wallet!";
-        }
     }
 }

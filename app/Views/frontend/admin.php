@@ -164,8 +164,10 @@ ini_set('display_errors', '1');
             <h1>Edit Users</h1>
             <form action="" id="editForm">
                 <label for="edit-user">Choose User</label>
-                <input type="text" class="w3-input" list="all-users" id="edit-user">
-                <datalist id="all-users"></datalist><br>
+                <input type="text" class="w3-input" list="all-users" id="edit-user" onkeyup="checkname()">
+                <datalist id="all-users"></datalist>
+                <p id="user-result" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br>
+
 
                 <label for="edit-option">Choose column to edit</label>
                 <select name="" id="edit-option" class="w3-input" onchange="changeOpt()">
@@ -269,6 +271,37 @@ ini_set('display_errors', '1');
 
             <button class="w3-button w3-center w3-margin-left w3-teal w3-hover-black w3- w3-animate-opacity" onclick="newProduct()">Complete</button>
         </section>
+
+        <script>
+            function checkname() {
+                var searchTerm = $("#edit-user").val()
+                $('#user-result').hide()
+
+                if (searchTerm == '') {
+                    loadTable(0, 1)
+                    return;
+                }
+
+                $.ajax({
+                    url: 'http://localhost:8080/Admin/dynamicSearch/' + searchTerm,
+                    success: function(result) {
+                        $('#all-users').empty()
+                        if (result.message.length == 0) {
+                            $('#user-result').show().text("User not Found!")
+                            loadTable(0, 1)
+                            return;
+                        }
+
+                        $.each(result.message, function(x, i) {
+                            $('#all-users').append('<option value="' + i.user_id + '">' + i.first_name + " " + i.last_name + "</option>")
+                        })
+                    },
+                    error: function(result) {
+                        console.error(result);
+                    }
+                })
+            }
+        </script>
 
     </main>
 </body>
