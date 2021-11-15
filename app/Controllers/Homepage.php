@@ -2,8 +2,10 @@
 
 namespace App\Controllers;
 
-use App\Models\UserModel;
+use App\Models\SubCategory;
 use App\Models\Wallet;
+use App\Models\Category;
+use App\Models\Product;
 
 class Homepage extends BaseController
 {
@@ -18,6 +20,8 @@ class Homepage extends BaseController
             echo view('frontend/login', $notThere);
     }
 
+    # WALLET
+
     public function wallet(int $id, int $money)
     {
         $wallet = new Wallet();
@@ -31,7 +35,47 @@ class Homepage extends BaseController
         $wallet = new Wallet();
 
         $amount = $wallet->getAmount($id);
-        $_SESSION['wallet'] = $amount;
+
+        if ($amount != null) {
+            $_SESSION['wallet'] = $amount;
+            return;
+        }
+
+        return null;
+        # $amount
+    }
+
+    # CATEGORIES
+
+    public function getCategories()
+    {
+        $category = new Category();
+
+        $categories = $category->getCategories();
+
+        return $this->response->setJSON($categories);
+    }
+
+    # SUB-CATEGORIES
+
+    public function getSubs($cat)
+    {
+        $subcategory = new SubCategory();
+
+        $subs = $subcategory->getSubs($cat);
+
+        return $this->response->setJSON($subs);
+    }
+
+    # PRODUCTS
+
+    public function getProducts(int $sub_id)
+    {
+        $product = new Product();
+
+        $prod = $product->getProducts($sub_id);
+
+        return $this->response->setJSON($prod);
     }
 
     public function editInfo()

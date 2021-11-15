@@ -39,4 +39,17 @@ class Product extends Model
     {
         # code...
     }
+
+    public function getProducts(int $sub_id)
+    {
+        $result = $this->select('product_id, product_name, unit_price')
+            ->where(['subcategory_id' => $sub_id])
+            ->get()->getResultArray();
+        $products = [];
+        foreach ($result as $row) {
+            array_push($products, $row);
+        }
+
+        return json_encode($products);
+    }
 }
