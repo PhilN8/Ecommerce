@@ -188,9 +188,8 @@ class Admin extends BaseController
         $details = [
             'product_name' => $name,
             'product_description' => $desc,
-            'unit_price' => doubleval($price),
+            'unit_price' => (float) $price,
             'subcategory_id' => $sub_id,
-            // 'created_at' => $date,
             'added_by' => $_SESSION['id']
         ];
 

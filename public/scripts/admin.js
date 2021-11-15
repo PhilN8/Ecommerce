@@ -188,8 +188,9 @@ function newProduct() {
     var product = $('#product-name').val();
     var subcategory_id = $('#subcategory-dropdown').val()
     var desc = $('#product-desc').val()
-    var price = parseFloat(parseFloat($('#price').val()).toFixed(2))
+    var price = parseFloat($('#price').val()).toFixed(2)
 
+console.log(price, typeof price, typeof parseFloat(parseFloat($('#price').val()).toFixed(2)), parseFloat(parseFloat($('#price').val()).toFixed(2)))
     $('#product-msg').hide()
     $('#prodResult').hide()
 
@@ -263,16 +264,31 @@ function dynamicSearch(){
 
 }
 
-function name() {
+function checkname() {
     var searchTerm = $("#edit-user").val()
+    $('#user-result').hide()
+
+    if (searchTerm == '') {
+        loadTable(0, 1)
+        return;
+    }
 
     $.ajax({
         url: 'http://localhost:8080/Admin/dynamicSearch/' + searchTerm,
         success: function(result) {
-            console.log(result)
-        }, 
-        error: function(){
-            console.error();
+            $('#all-users').empty()
+            if (result.message.length == 0) {
+                $('#user-result').show().text("User not Found!")
+                loadTable(0, 1)
+                return;
+            }
+
+            $.each(result.message, function(x, i) {
+                $('#all-users').append('<option value="' + i.user_id + '">' + i.first_name + " " + i.last_name + "</option>")
+            })
+        },
+        error: function(result) {
+            console.error(result);
         }
     })
 }

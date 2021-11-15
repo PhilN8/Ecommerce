@@ -61,11 +61,11 @@
             <select name="" id="product-list"></select>
             <p hidden id="product-result" class="w3-text-red"></p>
 
-            <div class="w3-row-padding">
-                <div class="w3-third w3-section">
-                    <div class="w3-card-4 w3-white w3-round" style="width:100%;">
-                        <!-- <img src="<?php # echo $img_src 
-                                        ?>" alt="<?php # echo $value["foodname"] 
+            <div class="w3-row-padding" id="product-images">
+                <!-- <div class="w3-third w3-section">
+                    <div class="w3-card-4 w3-white w3-round" style="width:100%;"> -->
+                <!-- <img src="<?php # echo $img_src 
+                                ?>" alt="<?php # echo $value["foodname"] 
                                                     ?>" class="w3-round" width="100%">
                         <div class="w3-container w3-center">
                             <h4><b><?php # echo $value["foodname"] 
@@ -75,14 +75,41 @@
                             <p>Price: <b><?php # echo $value["price"] 
                                             ?></b></p>
                         </div> -->
-                    </div>
-                </div>
+                <!-- </div>
+                </div> -->
             </div>
         </section>
     </main>
 
     <script>
+        function getProducts() {
+            var sub_id = $('#sub-list').val()
 
+            $('#product-list').empty()
+            $('#product-images').empty()
+            $('#product-result').hide()
+
+            $.ajax({
+                url: 'http://localhost:8080/Homepage/getProducts/' + sub_id,
+                success: function(result) {
+                    $.each(result, function(x, i) {
+                        $('#product-list').append('<option value=' + i.product_id + '>' + i.product_name + ' - ' + i.unit_price + '</option>')
+                        $('#product-images').append('<div class="w3-third w3-section" style="width:100%;">')
+                        $('#product-images').append('<div class="w3-card-4 w3-white w3-round" style="width:100%;">')
+                        $('#product-images').append('<img src=' + i.product_image + ' alt=' + i.product_name + ' class="w3-round" style="width: 100%" />')
+                        $('#product-images').append('<div class="w3-container w3-center">')
+                        $('#product-images').append('<h4><b>' + i.product_name + '</b></h4>')
+                        $('#product-images').append('<p>Price: <b>' + i.unit_price + '</b></p>')
+                        $('#product-images').append('</div></div>')
+                    })
+
+                    if (result.length == 0) {
+                        $('#product-result').show().text('* No Products Found')
+                    }
+                }
+            })
+
+        }
     </script>
 
 </body>

@@ -152,7 +152,6 @@ ini_set('display_errors', '1');
             <div class="w3-display-container w3-container w3-green w3-section" style="display: none;" id="edit-msg">
                 <span onclick="this.parentElement.style.display='none'; document.getElementById('editForm').reset()" class="w3-button w3-large w3-display-topright">&times;</span>
                 <h3>Edit Successful</h3>
-                <!-- <p>Try again...</p> -->
             </div>
 
             <div class="w3-display-container w3-container w3-red w3-section" style="display: none;" id="edit-fail">
@@ -273,34 +272,7 @@ ini_set('display_errors', '1');
         </section>
 
         <script>
-            function checkname() {
-                var searchTerm = $("#edit-user").val()
-                $('#user-result').hide()
 
-                if (searchTerm == '') {
-                    loadTable(0, 1)
-                    return;
-                }
-
-                $.ajax({
-                    url: 'http://localhost:8080/Admin/dynamicSearch/' + searchTerm,
-                    success: function(result) {
-                        $('#all-users').empty()
-                        if (result.message.length == 0) {
-                            $('#user-result').show().text("User not Found!")
-                            loadTable(0, 1)
-                            return;
-                        }
-
-                        $.each(result.message, function(x, i) {
-                            $('#all-users').append('<option value="' + i.user_id + '">' + i.first_name + " " + i.last_name + "</option>")
-                        })
-                    },
-                    error: function(result) {
-                        console.error(result);
-                    }
-                })
-            }
         </script>
 
     </main>
