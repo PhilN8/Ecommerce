@@ -12,6 +12,7 @@ class Product extends Model
     protected $allowedFields = [
         'product_name',
         'product_description',
+        'product_image',
         'unit-price',
         'available_quantity',
         'subcategory_id',
@@ -24,7 +25,7 @@ class Product extends Model
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'is_deleted';
 
-    public function checkProduct(string $product, int $sub_id)
+    public function checkProduct(string $product, int $sub_id): bool
     {
         if ($this->getWhere([
             'product_name' => $product,

@@ -162,6 +162,8 @@ function loadSubs() {
     var cat = $('#category-dropdown').val()
     $('#subcategory-dropdown').empty()
 
+    if (cat == '') return;
+
     $.ajax({
         url: "http://localhost:8080/Admin/getSubs/" + cat,
         success: function(result) {
@@ -190,12 +192,12 @@ function newProduct() {
     var desc = $('#product-desc').val()
     var price = parseFloat($('#price').val()).toFixed(2)
 
-console.log(price, typeof price, typeof parseFloat(parseFloat($('#price').val()).toFixed(2)), parseFloat(parseFloat($('#price').val()).toFixed(2)))
+// console.log(price, typeof price, typeof parseFloat(parseFloat($('#price').val()).toFixed(2)), parseFloat(parseFloat($('#price').val()).toFixed(2)))
     $('#product-msg').hide()
     $('#prodResult').hide()
 
     $.ajax({
-        url: 'http://localhost:8080/Admin/newProduct/' + product + '/' + desc + '/' + subcategory_id + '/' + price,
+        url: 'http://localhost:8080/newProduct/' + product + '/' + desc + '/' + subcategory_id + '/' + price,
         success: function(result) {
             if (result.message == 1)
                 $('#prodResult').show().text("* Product already exists");

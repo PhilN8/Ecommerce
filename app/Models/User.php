@@ -36,7 +36,7 @@ class User extends Model
             ->get()->getResultArray();
     }
 
-    public function createUser(array $newUser)
+    public function createUser(array $newUser): mixed
     {
 
         if ($this->insert($newUser, true) == true)
@@ -53,7 +53,7 @@ class User extends Model
         return false;
     }
 
-    public function deleteUser(int $id)
+    public function deleteUser(int $id): bool
     {
 
         if ($this->delete(['user_id' => $id]) == true)

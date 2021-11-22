@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\SubCategory;
+use App\Models\ProductImage;
 
 class Admin extends BaseController
 {
@@ -179,34 +180,116 @@ class Admin extends BaseController
 
     # PRODUCTS
 
-    public function newProduct(string $name, string $desc, int $sub_id, $price)
+    public function newProduct(string $name = null, string $desc = null, int $sub_id = null, $price = null)
     {
         session();
-        $prod = new Product();
-        $date = date("Y/m/d H:i:s", 1);
+        helper(['form']);
 
-        $details = [
-            'product_name' => $name,
-            'product_description' => $desc,
-            'unit_price' => (float) $price,
-            'subcategory_id' => $sub_id,
-            'added_by' => $_SESSION['id']
-        ];
+        if ($this->request->getMethod() == 'post') {
 
-        $check = $prod->checkProduct($name, $sub_id);
+            $file = $this->request->getFile('productimage');
 
-        if ($check) {
-            if ($prod->insert($details) == true) {
+            $rules = [
+                'categories' => [
+                    'rules' => 'required',
+                    'label' => 'Category'
+                ],
+                'subcategories' => [
+                    'rules' => 'required',
+                    'label' => 'Subcategory'
+                ],
+                'productname' => [
+                    'rules' => 'required',
+                    'label' => 'Product Name'
+                ],
+                'productimage' => [
+                    'rules' => 'uploaded[productimage]|is_image[productimage]',
+                    'label' => 'Product Image',
+                    'errors' => [
+                        'uploaded[productimage]' => 'Select an image for the product',
+                        'is_image[productimage]' =>  'File uploaded is not a valid image'
+                    ]
+                ],
+                'unitprice' => [
+                    'rules' => 'required',
+                    'label' => 'Price'
+                ]
+            ];
 
-                $string = ['message' => 3];
-            } else
+            if ($this->validate($rules)) {
 
+                if ($file->isValid() && !$file->hasMoved()) {
+                    $file->move('./images/database', $file->getRandomName());
+                }
+            } else {
+                $data['validation'] = $this->validator;
+                echo view('/frontend/admin', $data);
+                exit();
+            }
+
+            $product = new Product();
+            $image = new ProductImage();
+
+            // echo "<pre>";
+            // print_r($_FILES);
+            // echo "</pre>";
+
+            // $file = $this->request->getFile("prod-image");
+
+            // if ($file != null)
+            //     $string = ['message' => "Works"];
+            // else
+            //     $string = ['message' => "Does not work"];
+
+            // return $this->response->setJSON($string);
+            // exit();
+
+            // $file = new \CodeIgniter\Files\File();
+
+            $name = $this->request->getVar('productname');
+            $sub_id = $this->request->getVar('subcategories');
+            $desc = $this->request->getVar('productdesc');
+            $price = $this->request->getVar('unitprice');
+
+            $details = [
+                'product_name' => $name,
+                'product_description' => $desc,
+                'product_image' => $file->getName(),
+                'unit_price' => (float) $price,
+                'subcategory_id' => $sub_id,
+                'added_by' => $_SESSION['id']
+            ];
+
+
+
+
+
+            $check = $product->checkProduct($name, $sub_id);
+
+            if ($check) {
+                if ($product->insert($details) == true) {
+
+                    $image_details = [
+                        'product_image' => $file->getName(),
+                        'product_id' => $product->getInsertID(),
+                        'added_by' => $_SESSION['id']
+                    ];
+
+                    $image->newImage($image_details);
+                    $data['string'] = 3;
+
+                    $string = ['message' => 3];
+                } else
+                    $data['string'] = 2;
                 $string = ['message' => 2];
-        } else {
+            } else {
+                $data['string'] = 1;
+                $string = ['message' => 1];
+            }
 
-            $string = ['message' => 1];
+            echo view('frontend/admin', $data);
+
+            // return $this->response->setJSON($string);
         }
-
-        return $this->response->setJSON($string);
     }
 }

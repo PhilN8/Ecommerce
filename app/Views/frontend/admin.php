@@ -42,7 +42,7 @@ ini_set('display_errors', '1');
 
 <body style="background-color: #eee;">
 
-    <div class="w3-sidebar w3-bar-block w3-light-grey w3-card" style="width: 20%; float: left;">
+    <nav class="w3-sidebar w3-bar-block w3-light-grey w3-card" style="width: 20%; float: left;">
         <h5 class="w3-bar-item w3-black" style="margin-top: 0; margin-bottom: 0;">Users</h5>
         <button class="w3-bar-item w3-button tablinks w3-blue" onclick="showSection(event, 'intro', 'tablinks', 'admin-section', ' w3-blue')">Home</button>
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'new-admin-section', 'tablinks', 'admin-section', ' w3-blue')">Add an Admin</button>
@@ -56,9 +56,30 @@ ini_set('display_errors', '1');
 
         <a class="w3-bar-item w3-button w3-hover-red tablinks" href="<?= base_url('/logout') ?>">Logout</a>
 
-    </div>
+    </nav>
 
     <main style="width: 80%; float: right;">
+
+        <?php if (isset($validation)) :  ?>
+            <div class="w3-section w3-center w3-container w3-red">
+                <?= $validation->listErrors() ?>
+            </div>
+            <div class="w3-section w3-center w3-container w3-red">
+                <?= print_r($_POST) ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($string)) :
+            if ($string = 3) : ?>
+                <div class="w3-success w3-center w3-container w3-green">
+                    <h1>Product Added</h1>
+                </div>
+            <?php else : ?>
+                <div class="w3-success w3-center w3-container w3-red">
+                    <h1>Failure</h1>
+                </div>
+        <?php endif;
+        endif; ?>
         <section id="intro" class="admin-section w3-animate-opacity" style="width: 80%; margin: auto;">
             <h1>Admin Page</h1>
             <p>Welcome back, <?= $_SESSION['name'] ?></p>
@@ -238,41 +259,76 @@ ini_set('display_errors', '1');
 
             <h1>Add Product</h1>
             <br>
-            <label for="category-dropdown">Choose Category</label>
-            <select name="" id="category-dropdown" class="w3-input" onchange="loadSubs()">
-                <!-- <option value="">Choose an option</option> -->
-            </select><br>
-            <!-- <input class="w3-input" type="text" name="fname" id="first-name">tainer w3-sectionw3-con -->
-            <!-- <p id="fNameResult" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br> -->
+            <form enctype="multipart/form-data" class="" id="product-form" method="POST" action="<?= base_url('/Admin/newProduct') ?>">
 
-            <label for="subcategory-dropdown">Pick a Sub-Category</label>
-            <select name="" id="subcategory-dropdown" class="w3-input">
-                <!-- <option value="">Choose an option</option> -->
-            </select><br>
+                <label for="category-dropdown">Choose Category</label>
+                <select name="categories" id="category-dropdown" class="w3-input" onchange="loadSubs()">
+                    <option value=""></option>
+                </select><br>
+                <!-- <input class="w3-input" type="text" name="fname" id="first-name">tainer w3-sectionw3-con -->
+                <!-- <p id="fNameResult" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br> -->
 
-            <form enctype="multipart/form-data" class="" id="product-form">
+                <label for="subcategory-dropdown">Pick a Sub-Category</label>
+                <select name="subcategories" id="subcategory-dropdown" class="w3-input">
+                    <!-- <option value="">Choose an option</option> -->
+                </select><br>
+
 
                 <label for="product-name">Product Name:</label>
-                <input class="w3-input" type="text" name="productname" id="product-name">
+                <input class="w3-input" type="text" value="<?php # echo set_value('productname') 
+                                                            ?>" name="productname" id="product-name">
                 <p id="prodResult" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br>
 
 
                 <label for="product-desc">Brief Desc:</label>
-                <input class="w3-input" type="email" id="product-desc" name="productdesc">
+                <input class="w3-input" type="text" id="product-desc" name="productdesc" value="<?php # set_value('productdesc') 
+                                                                                                ?>">
                 <p id="descResult" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br>
+
+                <label for="product-image">Product Image:</label>
+                <input type="file" class="w3-input" id="product-image" name="productimage"><br>
 
 
                 <label for="price">Price:</label>
-                <input class="w3-input" type="number" id="price" name="unitprice">
+                <input class="w3-input" type="number" id="price" name="unitprice" value="<?php # set_value('unitprice') 
+                                                                                            ?>">
                 <p id="priceResult" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br>
+
+                <button type="submit" class="w3-button w3-center w3-margin-left w3-teal w3-hover-black">Submit</button>
 
             </form>
 
-            <button class="w3-button w3-center w3-margin-left w3-teal w3-hover-black w3- w3-animate-opacity" onclick="newProduct()">Complete</button>
+            <button class="w3-button w3-center w3-margin-left w3-teal w3-hover-black w3-animate-opacity" onclick="newProduct()">Complete</button>
         </section>
 
         <script>
+            function newProduct() {
+                var product = $('#product-name').val();
+                var subcategory_id = $('#subcategory-dropdown').val()
+                var desc = $('#product-desc').val()
+                var price = parseFloat($('#price').val()).toFixed(2)
 
+                // console.log(price, typeof price, typeof parseFloat(parseFloat($('#price').val()).toFixed(2)), parseFloat(parseFloat($('#price').val()).toFixed(2)))
+                $('#product-msg').hide()
+                $('#prodResult').hide()
+
+                $.ajax({
+                    url: 'http://localhost:8080/newProduct/' + product + '/' + desc + '/' + subcategory_id + '/' + price,
+                    type: 'POST',
+                    success: function(result) {
+                        console.log(result)
+                        if (result.message == 1)
+                            $('#prodResult').show().text("* Product already exists");
+                        else if (result.message == 2)
+                            $('#prodResult').show().text("* Error: Addition failed...");
+                        else
+                            $('#product-msg').show();
+                    },
+                    error: function() {
+                        $('#prodResult').show().text("* Error: Addition failed...");
+                    }
+                });
+            }
         </script>
 
     </main>
