@@ -168,7 +168,7 @@ function loadSubs() {
         url: "http://localhost:8080/Admin/getSubs/" + cat,
         success: function(result) {
             $.each(result, function(x, i) {
-                $('#subcategory-dropdown').append('<option value="' + i.subcategory_id + '" >' + i.subcategory_name + '</option>');
+                $('#subcategory-dropdown').append('<option value="' + i.subcategory_id + '">' + i.subcategory_name + '</option>');
             })
         }
     });
