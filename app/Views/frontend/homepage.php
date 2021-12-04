@@ -6,23 +6,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="<?= base_url('/css/w3.css') ?>">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="<?= base_url('/scripts/homepage.js') ?>"></script>
 </head>
 
 <body>
     <nav class="w3-sidebar w3-bar-block w3-light-grey w3-card" style="width: 20%; float: left;">
-        <button class="w3-bar-item w3-button tablinks w3-blue" onclick="showSection(event, 'intro', 'tablinks', 'home-section', ' w3-blue')">Home</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'wallet-section', 'tablinks', 'home-section', ' w3-blue')">Add to Wallet</button>
+        <h5 class="w3-bar-item w3-black" style="margin-top: 0; margin-bottom: 0;">Users</h5>
+        <button class="w3-bar-item w3-button tablinks w3-blue" onclick="showSection(event, 'intro', 'tablinks', 'home-section', ' w3-blue')">Home</button><br>
+
+        <h5 class="w3-bar-item w3-black" style="margin-top: 0; margin-bottom: 0;">Wallet</h5>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'wallet-section', 'tablinks', 'home-section', ' w3-blue'); getAmount(<?= $_SESSION['id'] ?>)">Add to Wallet</button>
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'view-products-section', 'tablinks', 'home-section', ' w3-blue'); getCats();">View Products</button>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'make-order-section', 'tablinks', 'home-section', ' w3-blue');">Make an Order</button><br>
+
         <a class="w3-bar-item w3-button w3-hover-red tablinks" href="<?= base_url('/logout') ?>">Logout</a>
     </nav>
+
     <main style="width: 80%; float: right;">
         <section id="intro" class="home-section w3-animate-opacity">
             <h1>Home Page</h1>
             <p>Welcome back, <?php echo $_SESSION['name'] ?></p>
-            <p><a href="<?= base_url('/logout') ?>">Logout</a></p>
         </section>
 
         <section id="wallet-section" class="home-section w3-animate-opacity" style="display: none;">
@@ -39,17 +44,15 @@
             <input type="text" class="w3-input" id="wallet">
             <p id="walletResult" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br>
 
-            <button class="w3-button w3-center w3-margin-left w3-teal w3-hover-black w3-section" onclick="addToWallet(<?= $_SESSION['id'] ?>)">Add to Wallet</button>
+            <button class="w3-button w3-center w3-margin-left w3-teal w3-hover-black w3-section" onclick="addToWallet(<?= $_SESSION['id'] ?>); getAmount(<?= $_SESSION['id'] ?>)">Add to Wallet</button>
+
+            <h1>Total Amount</h1>
+            <p id="wallet-amount" class="w3-section">Amount: </p>
+
         </section>
 
         <section id="view-products-section" class="home-section w3-animate-opacity" style="display: none;">
             <h1>View Products</h1>
-
-            <!-- <div class="w3-bar w3-black" id="category-menu">
-                <button class="w3-bar-item w3-button w3-red links" onclick="showSection(event, 'Main-Dishes', 'links', 'yes-dishes', ' w3-red')">Main Dishes</button>
-                <button class="w3-bar-item w3-button links" onclick="showSection(event, 'Side-Dishes', 'links', 'yes-dishes', ' w3-red')">Side Dishes</button>
-                <button class="w3-bar-item w3-button links" onclick="showSection(event, 'Snacks_', 'links', 'yes-dishes', ' w3-red')">Snacks</button>
-            </div> -->
 
             <label for="category-list">Choose Category</label>
             <select name="" id="category-list" onchange="getSubs()"></select>
@@ -62,54 +65,17 @@
             <p hidden id="product-result" class="w3-text-red"></p>
 
             <div class="w3-row-padding" id="product-images">
-                <!-- <div class="w3-third w3-section">
-                    <div class="w3-card-4 w3-white w3-round" style="width:100%;"> -->
-                <!-- <img src="<?php # echo $img_src 
-                                ?>" alt="<?php # echo $value["foodname"] 
-                                                    ?>" class="w3-round" width="100%">
-                        <div class="w3-container w3-center">
-                            <h4><b><?php # echo $value["foodname"] 
-                                    ?></b></h4>
-                            <p><?php # echo $value["food_description"] 
-                                ?></p>
-                            <p>Price: <b><?php # echo $value["price"] 
-                                            ?></b></p>
-                        </div> -->
-                <!-- </div>
-                </div> -->
+                <!-- LOAD PRODUCT IMAGES HERE -->
             </div>
+        </section>
+
+        <section id="make-order-section" class="home-section w3-animate-opacity" style="display: none;">
+            <h1>Make Orders</h1>
         </section>
     </main>
 
     <script>
-        function getProducts() {
-            var sub_id = $('#sub-list').val()
 
-            $('#product-list').empty()
-            $('#product-images').empty()
-            $('#product-result').hide()
-
-            $.ajax({
-                url: 'http://localhost:8080/Homepage/getProducts/' + sub_id,
-                success: function(result) {
-                    $.each(result, function(x, i) {
-                        $('#product-list').append('<option value=' + i.product_id + '>' + i.product_name + ' - ' + i.unit_price + '</option>')
-                        $('#product-images').append('<div class="w3-third w3-section" style="width:100%;">')
-                        $('#product-images').append('<div class="w3-card-4 w3-white w3-round" style="width:100%;">')
-                        $('#product-images').append('<img src=' + i.product_image + ' alt=' + i.product_name + ' class="w3-round" style="width: 100%" />')
-                        $('#product-images').append('<div class="w3-container w3-center">')
-                        $('#product-images').append('<h4><b>' + i.product_name + '</b></h4>')
-                        $('#product-images').append('<p>Price: <b>' + i.unit_price + '</b></p>')
-                        $('#product-images').append('</div></div>')
-                    })
-
-                    if (result.length == 0) {
-                        $('#product-result').show().text('* No Products Found')
-                    }
-                }
-            })
-
-        }
     </script>
 
 </body>

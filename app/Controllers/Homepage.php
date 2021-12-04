@@ -38,11 +38,10 @@ class Homepage extends BaseController
 
         if ($amount != null) {
             $_SESSION['wallet'] = $amount;
-            return;
+            return $this->response->setJSON(['amount' =>  $amount]);
         }
 
         return null;
-        # $amount
     }
 
     # CATEGORIES

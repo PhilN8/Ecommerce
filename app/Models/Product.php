@@ -43,7 +43,7 @@ class Product extends Model
 
     public function getProducts(int $sub_id)
     {
-        $result = $this->select('product_id, product_name, unit_price')
+        $result = $this->select('product_id, product_name, unit_price, product_image')
             ->where(['subcategory_id' => $sub_id])
             ->get()->getResultArray();
         $products = [];

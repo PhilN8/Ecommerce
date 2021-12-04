@@ -64,9 +64,6 @@ ini_set('display_errors', '1');
             <div class="w3-section w3-center w3-container w3-red">
                 <?= $validation->listErrors() ?>
             </div>
-            <div class="w3-section w3-center w3-container w3-red">
-                <?= print_r($_POST) ?>
-            </div>
         <?php endif; ?>
 
         <?php if (isset($string)) :
@@ -80,6 +77,7 @@ ini_set('display_errors', '1');
                 </div>
         <?php endif;
         endif; ?>
+
         <section id="intro" class="admin-section w3-animate-opacity" style="width: 80%; margin: auto;">
             <h1>Admin Page</h1>
             <p>Welcome back, <?= $_SESSION['name'] ?></p>
@@ -159,10 +157,12 @@ ini_set('display_errors', '1');
             <button class="w3-button" onclick="loadTable(0, 0)">All</button>
             <table class="user-table" id="users">
                 <thead>
-                    <th>User ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
+                    <tr>
+                        <th>User ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                    </tr>
                 </thead>
                 <tbody id="users-table" class="w3-animate-opacity">
                 </tbody>

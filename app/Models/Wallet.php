@@ -40,7 +40,6 @@ class Wallet extends Model
         if ($amount !== null)
             return $amount;
         else {
-            # $this->newWallet($id);
             return null;
         }
     }
