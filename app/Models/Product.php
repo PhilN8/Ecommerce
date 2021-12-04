@@ -53,4 +53,10 @@ class Product extends Model
 
         return json_encode($products);
     }
+
+    public function getPrice(int $id): int
+    {
+
+        return $this->select('unit_price')->where(['product_id' => $id])->first()['unit_price'];
+    }
 }

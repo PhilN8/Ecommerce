@@ -18,9 +18,9 @@ class UserLogin extends Model
         'logout_time'
     ];
 
-    // protected $useTimestamps = true;
-    // protected $createdField  = 'created_at';
-    // protected $updatedField  = 'updated_at';
+    protected $useTimestamps = true;
+    protected $createdField  = 'login_time';
+    protected $updatedField  = 'logout_time';
     protected $deletedField  = 'is_deleted';
 
     public function login(array $user): mixed

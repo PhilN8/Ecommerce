@@ -64,8 +64,6 @@ class Login extends BaseController
                         'login_id' => $login_id
                     ];
 
-                    // echo "Hapa kuna shida";
-
                     $session = session();
                     $session->set($ses_data);
 
