@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\SubCategory;
 use App\Models\ProductImage;
+use App\Models\PaymentType;
 
 class Admin extends BaseController
 {
@@ -291,5 +292,26 @@ class Admin extends BaseController
 
             // return $this->response->setJSON($string);
         }
+    }
+
+    # PAYMENT TYPES
+
+    public function newPayment(string $payment, string $desc = null)
+    {
+        $payType = new PaymentType();
+
+        $newType = [
+            'paymenttype_name' => $payment,
+            'description' => $desc
+        ];
+
+        $result = $payType->newPayment($newType);
+
+        if ($result == true)
+            $string = ['message' => 1];
+        else
+            $string = ['message' => 0];
+
+        return $this->response->setJSON($string);
     }
 }

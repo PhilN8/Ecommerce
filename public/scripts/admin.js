@@ -294,3 +294,28 @@ function checkname() {
         }
     })
 }
+
+function newPayment() {
+    var payment = $('#payment').val().trim()
+    payment = payment.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+        return letter.toUpperCase()
+    });
+    var description = $('#payment-description').val()
+
+    $('#payment-result').hide()
+    $('#payment-success').hide()
+
+    $.ajax({
+        url: 'http://localhost:8080/newPayment/' + payment + '/' + description,
+        success: function(result) {
+            console.log(result, result.message)
+            if (result.message == 1)
+                $('#payment-success').show()
+            else
+                $('#payment-result').show().text('* Payment Type already exists')
+        },
+        error: function() {
+            $('#payment-result').show().text('* Addition failed')
+        }
+    })
+}

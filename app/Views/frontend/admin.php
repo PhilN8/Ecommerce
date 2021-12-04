@@ -49,10 +49,11 @@ ini_set('display_errors', '1');
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'view-users-section', 'tablinks', 'admin-section', ' w3-blue'); loadTable(0, 0)">View Users</button>
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'edit-users-section', 'tablinks', 'admin-section', ' w3-blue'); loadTable(0, 1)">Edit Users</button><br>
 
-        <h5 class="w3-bar-item w3-black" style="margin-bottom: 0;">Clothes</h5>
+        <h5 class="w3-bar-item w3-black" style="margin-bottom: 0;">Add</h5>
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'category-section', 'tablinks', 'admin-section', ' w3-blue')">Add New Category</button>
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'sub-category-section', 'tablinks', 'admin-section', ' w3-blue')">Add New Sub-Category</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'product-section', 'tablinks', 'admin-section', ' w3-blue'); loadSubs()">Add Product</button><br>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'product-section', 'tablinks', 'admin-section', ' w3-blue'); loadSubs()">Add Product</button>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'payment-section', 'tablinks', 'admin-section', ' w3-blue'); loadSubs()">Add Payment Type</button><br>
 
         <a class="w3-bar-item w3-button w3-hover-red tablinks" href="<?= base_url('/logout') ?>">Logout</a>
 
@@ -246,7 +247,7 @@ ini_set('display_errors', '1');
             <label for="subcategory">Enter a new sub-category:</label>
             <input type="text" id="subcategory" class="w3-input">
             <p id="subcategoryResult" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br>
-            <button class="w3-button w3-center w3-margin-left w3-teal w3-hover-black w3- w3-animate-opacity" onclick="newSub()">Complete</button>
+            <button class="w3-button w3-center w3-margin-left w3-teal w3-hover-black w3-animate-opacity" onclick="newSub()">Complete</button>
         </section>
 
         <section id="product-section" class="admin-section w3-animate-opacity" style="width: 80%; margin: auto; display: none;">
@@ -299,6 +300,25 @@ ini_set('display_errors', '1');
             </form>
 
             <button class="w3-button w3-center w3-margin-left w3-teal w3-hover-black w3-animate-opacity" onclick="newProduct()">Complete</button>
+        </section>
+
+        <section id="payment-section" class="admin-section w3-animate-opacity" style="width: 80%; margin: auto; display: none;">
+
+            <div class="w3-display-container w3-container w3-green w3-section w3-animate-opacity" style="display: none;" id="payment-success">
+                <span onclick="this.parentElement.style.display='none'; $('#payment').val(''); $('#payment-description').val('')" class="w3-button w3-large w3-display-topright">&times;</span>
+                <h3>Success</h3>
+                <p>New Payment Type Added...</p>
+            </div>
+
+            <h1>Add Payment Type</h1>
+            <label for="payment">Enter a new payment type:</label>
+            <input type="text" name="payment" id="payment" class="w3-input">
+            <p id="payment-result" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br>
+
+            <label for="payment-description">Description:</label>
+            <input type="text" name="payment-description" id="payment-description" class="w3-input">
+            <button class="w3-button w3-center w3-margin-left w3-teal w3-hover-black w3-animate-opacity" onclick="newPayment()">Complete</button>
+
         </section>
 
         <script>
