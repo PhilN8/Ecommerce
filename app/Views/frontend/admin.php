@@ -62,18 +62,21 @@ ini_set('display_errors', '1');
     <main style="width: 80%; float: right;">
 
         <?php if (isset($validation)) :  ?>
-            <div class="w3-section w3-center w3-container w3-red">
+            <div class="w3-section w3-center w3-container w3-red w3-display-container">
+                <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
                 <?= $validation->listErrors() ?>
             </div>
         <?php endif; ?>
 
         <?php if (isset($string)) :
             if ($string = 3) : ?>
-                <div class="w3-success w3-center w3-container w3-green">
+                <div class="w3-success w3-center w3-container w3-green w3-display-container">
+                    <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
                     <h1>Product Added</h1>
                 </div>
             <?php else : ?>
-                <div class="w3-success w3-center w3-container w3-red">
+                <div class="w3-success w3-center w3-container w3-red w3-display-container">
+                    <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
                     <h1>Failure</h1>
                 </div>
         <?php endif;

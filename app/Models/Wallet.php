@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use phpDocumentor\Reflection\Types\Mixed_;
 
 class Wallet extends Model
 {
@@ -33,7 +34,7 @@ class Wallet extends Model
         $this->insert($new_wallet);
     }
 
-    public function getAmount(int $id)
+    public function getAmount(int $id): mixed
     {
         $amount = $this->select('amount_available')->where('customer_id', $id)->first()['amount_available'] ?? null;
 

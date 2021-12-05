@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\SubCategory;
 use App\Models\ProductImage;
 use App\Models\PaymentType;
+use PhpParser\Node\Expr\Cast\Double;
 
 class Admin extends BaseController
 {
@@ -250,20 +251,17 @@ class Admin extends BaseController
             $name = $this->request->getVar('productname');
             $sub_id = $this->request->getVar('subcategories');
             $desc = $this->request->getVar('productdesc');
-            $price = $this->request->getVar('unitprice');
+            $string_price = $this->request->getVar('unitprice');
 
+            $price = intval($string_price);
             $details = [
                 'product_name' => $name,
                 'product_description' => $desc,
                 'product_image' => $file->getName(),
-                'unit_price' => (float) $price,
+                'unit_price' => $price,
                 'subcategory_id' => $sub_id,
                 'added_by' => $_SESSION['id']
             ];
-
-
-
-
 
             $check = $product->checkProduct($name, $sub_id);
 

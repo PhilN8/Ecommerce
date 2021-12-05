@@ -130,6 +130,7 @@ class Homepage extends BaseController
                     $new_order = [
                         'order_id' => $order_id,
                         'product_id' => $product_id,
+                        'product_price' => $price,
                         'order_quantity' => $quantity,
                         'orderdetails_total' => $cost
                     ];

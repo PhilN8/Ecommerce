@@ -13,7 +13,7 @@ class Product extends Model
         'product_name',
         'product_description',
         'product_image',
-        'unit-price',
+        'unit_price',
         'available_quantity',
         'subcategory_id',
         'created_at',
@@ -54,7 +54,7 @@ class Product extends Model
         return json_encode($products);
     }
 
-    public function getPrice(int $id): int
+    public function getPrice(int $id)
     {
 
         return $this->select('unit_price')->where(['product_id' => $id])->first()['unit_price'];
