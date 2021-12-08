@@ -1,3 +1,7 @@
+$(function() {
+    checkCart()
+})
+
 function addToWallet(id) {
     var money = $('#wallet').val()
 
@@ -128,6 +132,67 @@ function getAmount(id) {
             else
                 $('#wallet-amount').text("Amount: " + result.amount)
 
+        }
+    })
+}
+
+function addToCart() {
+    var product = $('#product-list').val() ?? null
+
+    $('#product-result').hide()
+    $('#cart-msg').hide()
+    $('#already-in-cart-msg').hide()
+    $('#cart-table').empty()
+
+    if (product == null) {
+        $('#product-result').show().text('* No Product Selected')
+        return;
+    }
+
+    $.ajax({
+        url: 'http://localhost:8080/Homepage/cart/' + product,
+        success: function(result) {
+            if (result.message == 1)
+                $('#cart-msg').show()
+            else
+                $('#already-in-cart-msg').show()
+
+            checkCart()
+        },
+        error: function() {
+            $('#product-result').show().text('* Error in adding to Cart')
+        }
+    })
+}
+
+function orderHistory() {
+    $('#history-table').empty()
+
+    $.ajax({
+        url: 'http://localhost:8080/Homepage/orderHistory',
+        success: function(result) {
+            $.each(result, function(x, i) {
+                console.log(x, i)
+                $('#history-table').append('<tr><td>' + i.order_id + '</td><td>' + i.order_amount + '</td><td>' + i.order_status + '</td><td>' + i.updated_at.slice(0, 10) + '</td><tr>')
+            })
+        }
+    })
+}
+
+function checkCart() {
+    $('#cart-table').empty()
+
+    $.ajax({
+        url: 'http://localhost:8080/Homepage/cart',
+        success: function(result) {
+
+            if (result.orders.length == 0) return;
+
+            $.each(result.orders, function(x, i) {
+                $('#cart-table').append('<tr><td>' + i + '</td><td><input type="number" id="order-value" value="1" min="1" name="order' + (x + 1) + '" /></td><td><button type="submit" name="delete-order" value="' + x + '" class="w3-button w3-red">&times;</button></td></tr>')
+            })
+
+            $('#cart-count').text(result.count)
         }
     })
 }

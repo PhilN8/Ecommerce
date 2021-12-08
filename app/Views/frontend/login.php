@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>Login - Phil's Soko</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="<?= base_url('/css/w3.css') ?>" type="text/css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Lato: 100,300,400,700|Luckiest+Guy|Oxygen:300,400" rel="stylesheet">
     <link href="<?= base_url('/css/login.css') ?>" type="text/css" rel="stylesheet">
@@ -27,7 +27,7 @@
 <body>
     <ul class="navigation"><span class="my-name">SOKO la njue</span>
         <li><a href="<?= base_url('/') ?>">home</a></li>
-        <li><a href="menu.php">menu</a></li>
+        <!--        <li><a href="menu.php">menu</a></li>-->
         <li style="float: right;"><a href="<?= base_url('register') ?>">sign up</a></li>
     </ul>
 

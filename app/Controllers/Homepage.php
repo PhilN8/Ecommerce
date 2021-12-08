@@ -85,15 +85,19 @@ class Homepage extends BaseController
 
     # MAKE ORDERS
 
-    public function addToCart(int $product_id)
+    public function cart(int $product_id = null)
     {
         session();
-        if (!in_array($product_id, $_SESSION['orders'])) {
+        if (!in_array($product_id, $_SESSION['orders']) && $product_id != null) {
             array_push($_SESSION['orders'], $product_id);
-            return $this->response->setJSON(["message" => 1]);
-        } else {
+            return $this->response->setJSON(["message" => 1, "count" => count($_SESSION['orders']), "orders" => $_SESSION['orders']]);
+        }
+
+        if (in_array($product_id, $_SESSION['orders']) && $product_id != null) {
             return $this->response->setJSON(["message" => 0]);
         }
+
+        return $this->response->setJSON(["orders" => $_SESSION['orders'], "count" => count($_SESSION['orders'])]);
     }
 
     public function updateOrder()
@@ -154,5 +158,15 @@ class Homepage extends BaseController
                 echo view('frontend/homepage', $data);
             }
         }
+    }
+
+    public function orderHistory()
+    {
+        session();
+        $order = new Order();
+
+        $history = $order->history($_SESSION['id']);
+
+        return $this->response->setJSON($history);
     }
 }

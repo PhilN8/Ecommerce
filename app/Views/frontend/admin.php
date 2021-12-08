@@ -9,7 +9,7 @@ ini_set('display_errors', '1');
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="<?= base_url('/css/w3.css') ?>" type="text/css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Admin Page</title>
     <script src="<?= base_url('scripts/admin.js') ?>"></script>
@@ -90,7 +90,6 @@ ini_set('display_errors', '1');
         <!-- USERS -->
 
         <section id="new-admin-section" class="admin-section w3-animate-opacity" style="width: 80%; margin: auto; display: none;">
-            <!-- <h1>Register a New Admin</h1> -->
 
             <div class="w3-display-container w3-container w3-red w3-section" style="display: none;" id="reg-failed-msg">
                 <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
@@ -113,10 +112,6 @@ ini_set('display_errors', '1');
 
             <div class="w3-card-4 w3-section w3-animate-opacity">
 
-                <!-- <div class="w3-container w3-blue"> -->
-                <!-- <p style="background-color: #fff;">Sign up to enjoy our delicious food!</p> -->
-                <!-- </div> -->
-
                 <form class="w3-container" method="POST" action="<?= base_url('/Registration/registerUser') ?>" id="regForm">
                     <br>
                     <label for="first-name">First Name</label>
@@ -127,21 +122,17 @@ ini_set('display_errors', '1');
                     <input class="w3-input" type="text" name="lname" id="last-name">
                     <p id="lNameResult" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br>
 
-
                     <label for="emailaddress">Email</label>
                     <input class="w3-input" type="email" id="emailaddress" name="email">
                     <p id="emailResult" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br>
-
 
                     <label for="password1">Set Password</label>
                     <input class="w3-input" type="password" id="password1" name="pword1">
                     <p id="passResult" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br>
 
-
                     <label for="password2">Confirm Password</label>
                     <input class="w3-input" type="password" id="password2" name="pword2">
                     <p id="pass2Result" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br>
-
 
                     <label for="genders">Gender</label>
                     <select id="genders" name="gender" class="w3-input">
@@ -149,8 +140,10 @@ ini_set('display_errors', '1');
                         <option value="female">Female</option>
                     </select>
                 </form>
+
                 <button class="w3-button w3-center w3-margin-left w3-teal w3-hover-black w3-section" onclick="registerAdmin()">Complete</button>
                 <button class="w3-button w3-center w3-margin-right w3-red w3-hover-black w3-section w3-right" onclick="document.getElementById('regForm').reset()">Cancel</button>
+
             </div>
         </section>
 
@@ -188,7 +181,7 @@ ini_set('display_errors', '1');
             <h1>Edit Users</h1>
             <form action="" id="editForm">
                 <label for="edit-user">Choose User</label>
-                <input type="text" class="w3-input" list="all-users" id="edit-user" onkeyup="checkname()">
+                <input type="text" class="w3-input" list="all-users" id="edit-user" onkeyup="">
                 <datalist id="all-users"></datalist>
                 <p id="user-result" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br>
 
@@ -269,12 +262,9 @@ ini_set('display_errors', '1');
                 <select name="categories" id="category-dropdown" class="w3-input" onchange="loadSubs()">
                     <option value=""></option>
                 </select><br>
-                <!-- <input class="w3-input" type="text" name="fname" id="first-name">tainer w3-sectionw3-con -->
-                <!-- <p id="fNameResult" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br> -->
 
                 <label for="subcategory-dropdown">Pick a Sub-Category</label>
                 <select name="subcategories" id="subcategory-dropdown" class="w3-input">
-                    <!-- <option value="">Choose an option</option> -->
                 </select><br>
 
 
@@ -302,7 +292,7 @@ ini_set('display_errors', '1');
 
             </form>
 
-            <button class="w3-button w3-center w3-margin-left w3-teal w3-hover-black w3-animate-opacity" onclick="newProduct()">Complete</button>
+            <!-- <button class="w3-button w3-center w3-margin-left w3-teal w3-hover-black w3-animate-opacity" onclick="newProduct()">Complete</button> -->
         </section>
 
         <section id="payment-section" class="admin-section w3-animate-opacity" style="width: 80%; margin: auto; display: none;">
@@ -331,7 +321,6 @@ ini_set('display_errors', '1');
                 var desc = $('#product-desc').val()
                 var price = parseFloat($('#price').val()).toFixed(2)
 
-                // console.log(price, typeof price, typeof parseFloat(parseFloat($('#price').val()).toFixed(2)), parseFloat(parseFloat($('#price').val()).toFixed(2)))
                 $('#product-msg').hide()
                 $('#prodResult').hide()
 

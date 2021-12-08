@@ -10,37 +10,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="<?= base_url('/scripts/homepage.js') ?>"></script>
     <style>
-        .container {
-            font-size: 5em;
-            background-color: #a8a8a8;
-            color: white;
-            width: 8em;
-            height: 2em;
-            line-height: 2;
-            text-align: center;
-            font-family: Helvetica, Arial, sans-serif;
-            font-weight: bold;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .link {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-
         th,
         td {
             text-align: center;
             padding: 15px;
         }
 
-        th,
-        #total-cost {
+        th {
             border: solid black;
             background-color: #000;
             color: #fff;
@@ -56,18 +32,23 @@
             background-color: black;
             color: white;
         }
+
+        body {
+            background-color: #eee;
+        }
     </style>
 </head>
 
 <body>
     <nav class="w3-sidebar w3-bar-block w3-light-grey w3-card" style="width: 20%; float: left;">
         <h5 class="w3-bar-item w3-black" style="margin-top: 0; margin-bottom: 0;">Users</h5>
-        <button class="w3-bar-item w3-button tablinks w3-blue" onclick="showSection(event, 'intro', 'tablinks', 'home-section', ' w3-blue')">Home</button><br>
+        <button class="w3-bar-item w3-button tablinks w3-blue" onclick="showSection(event, 'intro', 'tablinks', 'home-section', ' w3-blue')">Home</button>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'history-section', 'tablinks', 'home-section', ' w3-blue'); orderHistory()">History</button><br>
 
         <h5 class="w3-bar-item w3-black" style="margin-top: 0; margin-bottom: 0;">Wallet</h5>
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'wallet-section', 'tablinks', 'home-section', ' w3-blue'); getAmount(<?= $_SESSION['id'] ?>)">Add to Wallet</button>
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'view-products-section', 'tablinks', 'home-section', ' w3-blue'); getCats();">View Products</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'view-cart-section', 'tablinks', 'home-section', ' w3-blue');">View Cart <span class="w3-orange w3-round w3-text-white"><b><?php echo (count($_SESSION['orders']) > 0) ? count($_SESSION['orders']) : "" ?></b></span></button><br>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'view-cart-section', 'tablinks', 'home-section', ' w3-blue');">View Cart <span class="w3-orange w3-round w3-text-white"><b id="cart-count"><?php echo (count($_SESSION['orders']) > 0) ? count($_SESSION['orders']) : "" ?></b></span></button><br>
 
         <a class="w3-bar-item w3-button w3-hover-red tablinks" href="<?= base_url('/logout') ?>">Logout</a>
     </nav>
@@ -93,13 +74,6 @@
             <h1>Home Page</h1>
             <p>Welcome back, <?php echo $_SESSION['name'] ?></p>
         </section>
-
-        <!-- <div class="container">
-            W3Docs
-            <a href="https://www.w3docs.com/" target="_blank">
-                <span class="link"></span>
-            </a>
-        </div> -->
 
         <section id="wallet-section" class="home-section w3-animate-opacity" style="display: none;">
 
@@ -147,7 +121,7 @@
             <label for="product-list">Choose Products</label>
             <select name="" id="product-list"></select>
 
-            <button onclick="addToCart()" class="w3-button w3-center w3-blue">Add to Cart</button>
+            <button onclick="addToCart();" class="w3-button w3-center w3-blue">Add to Cart</button>
 
             <p hidden id="product-result" class="w3-text-red"></p>
 
@@ -165,55 +139,36 @@
                         <th>Quantity</th>
                         <th>Remove from Cart</th>
                     </thead>
-                    <tbody>
-                        <?php
-                        $j = 1;
+                    <tbody id="cart-table">
 
-                        foreach ($_SESSION['orders'] as $key => $value) {
-
-                        ?>
-                            <tr>
-                                <td><?php echo $value ?></td>
-                                <td><input type="number" id="order-value" value="1" min="1" name="<?php echo "order" . $j++ ?>" /></td>
-                                <td><button type="submit" name="delete-order" value="<?php echo $key ?>" class="w3-button w3-red">&times;</td>
-
-                            </tr>
-                        <?php
-                        }
-                        ?>
                     </tbody>
                 </table><br>
                 <input type="submit" value="Complete Order" class="w3-button w3-blue w3-hover-black" name="complete-order" />
             </form>
         </section>
+
+        <section id="pay-order-section" class="home-section w3-animate-opacity" style="display: none;">
+            <h1>Pay for Current Orders</h1>
+        </section>
+
+        <section id="history-section" class="home-section w3-animate-opacity" style="display: none;">
+            <h1 class="w3-center">History of Orders</h1>
+
+            <table>
+                <thead>
+                    <th>Order ID</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </thead>
+                <tbody id="history-table"></tbody>
+            </table>
+
+        </section>
     </main>
 
     <script>
-        function addToCart() {
-            var product = $('#product-list').val() ?? null
 
-            $('#product-result').hide()
-            $('#cart-msg').hide()
-            $('#already-in-cart-msg').hide()
-
-            if (product == null) {
-                $('#product-result').show().text('* No Product Selected')
-                return;
-            }
-
-            $.ajax({
-                url: 'http://localhost:8080/Homepage/addToCart/' + product,
-                success: function(result) {
-                    if (result.message == 1)
-                        $('#cart-msg').show()
-                    else
-                        $('#already-in-cart-msg').show()
-                },
-                error: function() {
-                    $('#product-result').show().text('* Error in adding to Cart')
-                }
-            })
-        }
     </script>
 
 </body>

@@ -150,7 +150,7 @@ function loadTable(role, place) {
                         $('#users').fadeIn()
                         $('#users-table').fadeIn().append('<tr><td>' + i.user_id + '</td><td>' + i.first_name + '</td><td>' + i.last_name + '</td><td>' + i.email + '</td></tr>');
                     } else {
-                        $('#all-users').append('<option value="'+ i.user_id +'">' + i.first_name + " " + i.last_name + "</option>")
+                        $('#all-users').append('<option value="'+ i.user_id +'">' + i.user_id + " - " + i.first_name + " " + i.last_name + "</option>")
                     }
                 })
             }
@@ -192,7 +192,6 @@ function newProduct() {
     var desc = $('#product-desc').val()
     var price = parseFloat($('#price').val()).toFixed(2)
 
-// console.log(price, typeof price, typeof parseFloat(parseFloat($('#price').val()).toFixed(2)), parseFloat(parseFloat($('#price').val()).toFixed(2)))
     $('#product-msg').hide()
     $('#prodResult').hide()
 

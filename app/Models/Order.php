@@ -32,4 +32,9 @@ class Order extends Model
     {
         $this->update($id, ['order_amount' => $total]);
     }
+
+    public function history(int $id)
+    {
+        return $this->select('order_id, order_amount, order_status, updated_at')->where('customer_id', $id)->findAll();
+    }
 }
