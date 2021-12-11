@@ -112,7 +112,7 @@ function getProducts() {
                     source = '';
                 else
                     source = "http://localhost:8080/images/database/" + i.product_image;
-                $('#product-images').append('<div class="w3-third w3-section"><div class="w3-card-4 w3-white w3-round" style="width: 100%;"><img src="' + source + '" alt=' + i.product_name + ' class="w3-round" style="width: 100%;" /><div class="w3-container w3-center"><h4><b>' + i.product_name + '</b></h4><p>Price: <b>' + i.unit_price + '</b></p></div></div></div>')
+                $('#product-images').append('<div class="w3-third w3-section" style="height: 200px;"><div class="w3-card-4 w3-white w3-round" style="width: 100%;"><img src="' + source + '" alt=' + i.product_name + ' class="w3-round" style="width: 100%;" /><div class="w3-container w3-center"><h4><b>' + i.product_name + '</b></h4><p>Price: <b>' + i.unit_price + '</b></p><button onclick="addToCart(' + i.product_id +')" class="w3-button w3-center"><i class="bi bi-cart-plus-fill"></i></button><br/></div></div></div>')
             })
 
             if (result.length == 0) {
@@ -136,18 +136,11 @@ function getAmount(id) {
     })
 }
 
-function addToCart() {
-    var product = $('#product-list').val() ?? null
-
+function addToCart(product) {
     $('#product-result').hide()
     $('#cart-msg').hide()
     $('#already-in-cart-msg').hide()
     $('#cart-table').empty()
-
-    if (product == null) {
-        $('#product-result').show().text('* No Product Selected')
-        return;
-    }
 
     $.ajax({
         url: 'http://localhost:8080/Homepage/cart/' + product,

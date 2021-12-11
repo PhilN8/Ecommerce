@@ -8,6 +8,7 @@
     <title>Home Page</title>
     <link rel="stylesheet" href="<?= base_url('/css/w3.css') ?>">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <script src="<?= base_url('/scripts/homepage.js') ?>"></script>
     <style>
         th,
@@ -118,14 +119,14 @@
             <label for="sub-list">Choose Sub-Category</label>
             <select name="" id="sub-list" onchange="getProducts()"></select>
 
-            <label for="product-list">Choose Products</label>
+            <!-- <label for="product-list">Choose Products</label>
             <select name="" id="product-list"></select>
 
-            <button onclick="addToCart();" class="w3-button w3-center w3-blue">Add to Cart</button>
+            <button onclick="addToCart();" class="w3-button w3-center w3-blue">Add to Cart</button> -->
 
             <p hidden id="product-result" class="w3-text-red"></p>
 
-            <div class="w3-row-padding" id="product-images">
+            <div class="w3-row-padding" id="product-images" style="height: 100px;">
                 <!-- LOAD PRODUCT IMAGES HERE -->
             </div>
         </section>
