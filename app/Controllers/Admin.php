@@ -10,7 +10,7 @@ use App\Models\Product;
 use App\Models\SubCategory;
 use App\Models\ProductImage;
 use App\Models\PaymentType;
-use PhpParser\Node\Expr\Cast\Double;
+use App\Models\Order;
 
 class Admin extends BaseController
 {
@@ -311,5 +311,23 @@ class Admin extends BaseController
             $string = ['message' => 0];
 
         return $this->response->setJSON($string);
+    }
+
+    # ORDERS
+
+    public function orders() {
+        $order =  new Order();
+
+        $all_orders = $order->history();
+
+        return $this->response->setJSON($all_orders);
+    }
+
+    public function updateOrder(int $order_id) {
+        $order = new Order();
+
+        $order->updateOrder($order_id);
+
+        return $this->response->setJSON(["message" => "order updated"]);
     }
 }

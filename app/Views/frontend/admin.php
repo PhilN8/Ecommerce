@@ -22,20 +22,23 @@ ini_set('display_errors', '1');
 
         th {
             border: solid black;
+            background-color: #000;
+            color: #fff;
         }
 
         table {
             background-color: #fff;
-        }
-
-        .user-table {
             margin-left: auto;
             margin-right: auto;
         }
 
-        .user-table th {
+        th {
             background-color: black;
             color: white;
+        }
+
+        body {
+            background-color: #eee;
         }
     </style>
 </head>
@@ -53,7 +56,10 @@ ini_set('display_errors', '1');
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'category-section', 'tablinks', 'admin-section', ' w3-blue')">Add New Category</button>
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'sub-category-section', 'tablinks', 'admin-section', ' w3-blue')">Add New Sub-Category</button>
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'product-section', 'tablinks', 'admin-section', ' w3-blue'); loadSubs()">Add Product</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'payment-section', 'tablinks', 'admin-section', ' w3-blue'); loadSubs()">Add Payment Type</button><br>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'payment-section', 'tablinks', 'admin-section', ' w3-blue'); loadSubs()">Add Payment Type</button><br/>
+
+        <h5 class="w3-bar-item w3-black" style="margin-bottom: 0;">Orders</h5>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event,'order-section', 'tablinks', 'admin-section', 'w3-blue')">View Orders</button><br/>
 
         <a class="w3-bar-item w3-button w3-hover-red tablinks" href="<?= base_url('/logout') ?>">Logout</a>
 
@@ -267,12 +273,10 @@ ini_set('display_errors', '1');
                 <select name="subcategories" id="subcategory-dropdown" class="w3-input">
                 </select><br>
 
-
                 <label for="product-name">Product Name:</label>
                 <input class="w3-input" type="text" value="<?php # echo set_value('productname') 
                                                             ?>" name="productname" id="product-name">
                 <p id="prodResult" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br>
-
 
                 <label for="product-desc">Brief Desc:</label>
                 <input class="w3-input" type="text" id="product-desc" name="productdesc" value="<?php # set_value('productdesc') 
@@ -282,9 +286,8 @@ ini_set('display_errors', '1');
                 <label for="product-image">Product Image:</label>
                 <input type="file" class="w3-input" id="product-image" name="productimage"><br>
 
-
                 <label for="price">Price:</label>
-                <input class="w3-input" type="number" id="price" name="unitprice" value="<?php # set_value('unitprice') 
+                <input class="w3-input" type="number" id="price" name="unitprice" value="<?php # set_value('unitprice')
                                                                                             ?>">
                 <p id="priceResult" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br>
 
@@ -292,7 +295,6 @@ ini_set('display_errors', '1');
 
             </form>
 
-            <!-- <button class="w3-button w3-center w3-margin-left w3-teal w3-hover-black w3-animate-opacity" onclick="newProduct()">Complete</button> -->
         </section>
 
         <section id="payment-section" class="admin-section w3-animate-opacity" style="width: 80%; margin: auto; display: none;">
@@ -314,6 +316,33 @@ ini_set('display_errors', '1');
 
         </section>
 
+        <section id="order-section" class="admin-section w3-animate-opacity" style="width: 80%; margin: auto; display: none">
+
+            <div class="w3-display-container w3-container w3-green w3-section w3-animate-opacity" style="display: none;" id="order-update">
+                <span onclick="this.parentElement.style.display='none';" class="w3-button w3-large w3-display-topright">&times;</span>
+                <h3>Success</h3>
+                <p id="order-msg">Order Updated...</p>
+            </div>
+
+            <div class="w3-display-container w3-container w3-red w3-section w3-animate-opacity" style="display: none;" id="order-fail">
+                <span onclick="this.parentElement.style.display='none';" class="w3-button w3-large w3-display-topright">&times;</span>
+                <h3>Success</h3>
+                <p id="order-fail-msg">Order Updated...</p>
+            </div>
+
+            <h1 class="w3-center">Order History</h1>
+
+            <table>
+                <thead>
+                <th>Order ID</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Date</th>
+                </thead>
+                <tbody id="order-table"></tbody>
+            </table>
+        </section>
+
         <script>
             function newProduct() {
                 var product = $('#product-name').val();
@@ -328,7 +357,6 @@ ini_set('display_errors', '1');
                     url: 'http://localhost:8080/newProduct/' + product + '/' + desc + '/' + subcategory_id + '/' + price,
                     type: 'POST',
                     success: function(result) {
-                        console.log(result)
                         if (result.message == 1)
                             $('#prodResult').show().text("* Product already exists");
                         else if (result.message == 2)

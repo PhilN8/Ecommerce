@@ -9,6 +9,7 @@ $(function() {
         }
     });
 
+    orders()
 });
 
 function showSection(event, section, menu, option, color) {    
@@ -67,7 +68,6 @@ function registerAdmin() {
   $.ajax({
       url: 'http://localhost:8080/regCheck/' + email + '/' + fname + '/' + lname + '/' + pass1 + '/' + gender + '/' + role,
       success: function(result) {
-          console.log(result, result.message)
           if (result.message == 'Not a valid email')
               $('#emailResult').show().text("* " + result.message)
           else if (result.message == 'Email already exists')
@@ -315,6 +315,40 @@ function newPayment() {
         },
         error: function() {
             $('#payment-result').show().text('* Addition failed')
+        }
+    })
+}
+
+function orders() {
+    $('#order-table').empty()
+
+    $.ajax({
+        url: 'http://localhost:8080/Admin/orders',
+        success: function(result) {
+            $.each(result, function(x, i) {
+                i.order_status = i.order_status.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                    return letter.toUpperCase()
+                });
+                $('#order-table').append('<tr><td>' + i.order_id + '</td><td>' + i.order_amount + '</td><td>' + i.order_status + '</td><td>' + i.created_at.slice(0, 10) + '</td><td><button class="w3-button w3-amber" onclick="updateOrder(' + i.order_id + ')">Update</button><tr>')
+            })
+        }
+    })
+}
+
+function updateOrder(id) {
+    $('#order-update').hide()
+    $('#order-fail').hide()
+
+    $.ajax({
+        url: 'http://localhost:8080/Admin/updateOrder/' + id,
+        success: function(result){
+            $('#order-update').show()
+            $('#order-msg').val('Order of ID' + id + ' Updated')
+            orders()
+        },
+        error: function() {
+            $('#order-fail').show()
+            $('#order-fail-msg').val('Order of ID' + id + ' Not Updated')
         }
     })
 }

@@ -165,7 +165,6 @@ function orderHistory() {
         url: 'http://localhost:8080/Homepage/orderHistory',
         success: function(result) {
             $.each(result, function(x, i) {
-                console.log(x, i)
                 $('#history-table').append('<tr><td>' + i.order_id + '</td><td>' + i.order_amount + '</td><td>' + i.order_status + '</td><td>' + i.updated_at.slice(0, 10) + '</td><tr>')
             })
         }

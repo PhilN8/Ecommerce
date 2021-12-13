@@ -13,7 +13,8 @@ class Order extends Model
     protected $allowedFields = [
         'customer_id',
         'order_amount',
-        'payment_type'
+        'payment_type',
+        'order_status'
     ];
 
     protected $useTimestamps = true;
@@ -33,8 +34,16 @@ class Order extends Model
         $this->update($id, ['order_amount' => $total]);
     }
 
-    public function history(int $id)
+    public function history(int $id = null)
     {
-        return $this->select('order_id, order_amount, order_status, updated_at')->where('customer_id', $id)->findAll();
+        if ($id != null)
+            return $this->select('order_id, order_amount, order_status, updated_at')->where('customer_id', $id)->findAll();
+
+        return $this->select('order_id, order_amount, order_status, created_at')->findAll();
+    }
+
+    public function updateOrder(int $id)
+    {
+        $this->update($id, ['order_status' => 'pending payment']);
     }
 }
