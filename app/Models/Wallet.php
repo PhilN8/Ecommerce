@@ -40,9 +40,8 @@ class Wallet extends Model
 
         if ($amount !== null)
             return $amount;
-        else {
+        else
             return null;
-        }
     }
 
     public function updateWallet(int $id, int $money)

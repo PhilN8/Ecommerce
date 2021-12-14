@@ -37,13 +37,15 @@ class Order extends Model
     public function history(int $id = null)
     {
         if ($id != null)
-            return $this->select('order_id, order_amount, order_status, updated_at')->where('customer_id', $id)->findAll();
+            return $this->select('order_id, order_amount, order_status, created_at')->where('customer_id', $id)->findAll();
 
         return $this->select('order_id, order_amount, order_status, created_at')->findAll();
     }
 
-    public function updateOrder(int $id)
+    public function updateOrder(int $id, string $update)
     {
-        $this->update($id, ['order_status' => 'pending payment']);
+        $this->update($id, ['order_status' => $update]);
     }
+
+
 }

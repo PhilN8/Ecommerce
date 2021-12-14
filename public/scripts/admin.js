@@ -12,18 +12,18 @@ $(function() {
     orders()
 });
 
-function showSection(event, section, menu, option, color) {    
-    var i, tablinks;
-    var x = document.getElementsByClassName(option);
-    for (i = 0; i < x.length; i++) {
-      x[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName(menu);
-    for (i = 0; i < x.length; i++) {
-      tablinks[i].className = tablinks[i].className.replace(color, "");
-    }
-    document.getElementById(section).style.display = "block"; 
-    event.currentTarget.className += color;     
+function showSection(event, section) {
+    var i, x, tablinks
+    x = document.getElementsByClassName('admin-section')
+    for (i = 0; i < x.length; i++)
+        x[i].style.display = 'none'
+
+    tablinks = document.getElementsByClassName('tablinks')
+    for (i = 0; i < x.length; i++)
+        tablinks[i].className = tablinks[i].className.replace(' w3-blue', "");
+
+    document.getElementById(section).style.display = "block"
+    event.currentTarget.className += " w3-blue"
 }
 
 function registerAdmin() {

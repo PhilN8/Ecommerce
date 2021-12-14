@@ -326,7 +326,7 @@ class Admin extends BaseController
     public function updateOrder(int $order_id) {
         $order = new Order();
 
-        $order->updateOrder($order_id);
+        $order->updateOrder($order_id, 'pending payment');
 
         return $this->response->setJSON(["message" => "order updated"]);
     }

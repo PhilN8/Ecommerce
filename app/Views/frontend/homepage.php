@@ -43,13 +43,14 @@
 <body>
     <nav class="w3-sidebar w3-bar-block w3-light-grey w3-card" style="width: 20%; float: left;">
         <h5 class="w3-bar-item w3-black" style="margin-top: 0; margin-bottom: 0;">Users</h5>
-        <button class="w3-bar-item w3-button tablinks w3-blue" onclick="showSection(event, 'intro', 'tablinks', 'home-section', ' w3-blue')">Home</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'history-section', 'tablinks', 'home-section', ' w3-blue'); orderHistory()">History</button><br>
+        <button class="w3-bar-item w3-button tablinks w3-blue" onclick="showSection(event, 'intro')">Home</button>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'history-section'); orderHistory()">History</button>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'pay-order-section');">Pay</button><br/>
 
         <h5 class="w3-bar-item w3-black" style="margin-top: 0; margin-bottom: 0;">Wallet</h5>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'wallet-section', 'tablinks', 'home-section', ' w3-blue'); getAmount(<?= $_SESSION['id'] ?>)">Add to Wallet</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'view-products-section', 'tablinks', 'home-section', ' w3-blue'); getCats();">View Products</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'view-cart-section', 'tablinks', 'home-section', ' w3-blue');">View Cart <span class="w3-orange w3-round w3-text-white"><b id="cart-count"><?php echo (count($_SESSION['orders']) > 0) ? count($_SESSION['orders']) : "" ?></b></span></button><br>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'wallet-section'); getAmount(<?= $_SESSION['id'] ?>)">Add to Wallet</button>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'view-products-section');">View Products</button>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'view-cart-section');">View Cart <span class="w3-orange w3-round w3-text-white"><b id="cart-count"><?php echo (count($_SESSION['orders']) > 0) ? count($_SESSION['orders']) : "" ?></b></span></button><br>
 
         <a class="w3-bar-item w3-button w3-hover-red tablinks" href="<?= base_url('/logout') ?>">Logout</a>
     </nav>
@@ -149,7 +150,35 @@
         </section>
 
         <section id="pay-order-section" class="home-section w3-animate-opacity" style="display: none;">
+
+            <div class="w3-display-container w3-container w3-green w3-section" style="display: none;" id="pay-msg">
+                <span onclick="this.parentElement.style.display='none';" class="w3-button w3-large w3-display-topright">&times;</span>
+                <h3>Success</h3>
+                <p id="pay-order-msg"></p>
+            </div>
+
+            <div class="w3-display-container w3-container w3-red w3-section" style="display: none;" id="no-money">
+                <span onclick="this.parentElement.style.display='none';" class="w3-button w3-large w3-display-topright">&times;</span>
+                <h3>Failure</h3>
+                <p>Amount in your wallet cannot cover the payment of this Order</p>
+            </div>
+
+            <div class="w3-display-container w3-container w3-red w3-section" style="display: none;" id="pay-fail">
+                <span onclick="this.parentElement.style.display='none';" class="w3-button w3-large w3-display-topright">&times;</span>
+                <h3>Payment Failed</h3>
+                <p>Try again later...</p>
+            </div>
+
             <h1>Pay for Current Orders</h1>
+            <table>
+                <thead>
+                <th>Order ID</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Date</th>
+                </thead>
+                <tbody id="order-table"></tbody>
+            </table>
         </section>
 
         <section id="history-section" class="home-section w3-animate-opacity" style="display: none;">

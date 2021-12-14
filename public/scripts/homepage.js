@@ -1,5 +1,7 @@
 $(function() {
     checkCart()
+    orderHistory()
+    getCats()
 })
 
 function addToWallet(id) {
@@ -31,18 +33,18 @@ function addToWallet(id) {
 
 }
 
-function showSection(event, section, menu, option, color) {    
-    var i, tablinks;
-    var x = document.getElementsByClassName(option);
-    for (i = 0; i < x.length; i++) {
-      x[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName(menu);
-    for (i = 0; i < x.length; i++) {
-      tablinks[i].className = tablinks[i].className.replace(color, "");
-    }
-    document.getElementById(section).style.display = "block"; 
-    event.currentTarget.className += color;     
+function showSection(event, section) {
+    var i, x, tablinks
+    x = document.getElementsByClassName('home-section')
+    for (i = 0; i < x.length; i++)
+        x[i].style.display = 'none'
+
+    tablinks = document.getElementsByClassName('tablinks')
+    for (i = 0; i < x.length; i++)
+        tablinks[i].className = tablinks[i].className.replace(' w3-blue', "");
+
+    document.getElementById(section).style.display = "block"
+    event.currentTarget.className += " w3-blue"
 }
 
 function getCats() {
@@ -73,27 +75,6 @@ function getSubs() {
             getProducts();
         }
     })
-}
-
-function getProducts() {
-    var sub_id = $('#sub-list').val()
-
-    $('#product-list').empty()
-    $('#product-result').hide()
-
-    $.ajax({
-        url: 'http://localhost:8080/Homepage/getProducts/' + sub_id,
-        success: function(result) {
-            $.each(result, function(x, i) {
-                $('#product-list').append('<option value=' + i.product_id + '>' + i.product_name + ' - ' + i.unit_price + '</option>')
-            })
-
-            if (result.length == 0) {
-                $('#product-result').show().text('* No Products Found')
-            }
-        }
-    })
-
 }
 
 function getProducts() {
@@ -160,12 +141,18 @@ function addToCart(product) {
 
 function orderHistory() {
     $('#history-table').empty()
+    $('#order-table').empty()
 
     $.ajax({
         url: 'http://localhost:8080/Homepage/orderHistory',
         success: function(result) {
             $.each(result, function(x, i) {
-                $('#history-table').append('<tr><td>' + i.order_id + '</td><td>' + i.order_amount + '</td><td>' + i.order_status + '</td><td>' + i.updated_at.slice(0, 10) + '</td><tr>')
+                i.order_status = i.order_status.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                    return letter.toUpperCase()
+                });
+                $('#history-table').append('<tr><td>' + i.order_id + '</td><td>' + i.order_amount + '</td><td>' + i.order_status + '</td><td>' + i.created_at.slice(0, 10) + '</td><tr>')
+                if(i.order_status == 'Pending Payment')
+                    $('#order-table').append('<tr><td>' + i.order_id + '</td><td>' + i.order_amount + '</td><td>' + i.order_status + '</td><td>' + i.created_at.slice(0, 10) + '</td><td><button class="w3-aqua w3-button" onclick="payOrder(' + i.order_id + ',' + i.order_amount + ')">Pay</button></td><tr>')
             })
         }
     })
@@ -185,6 +172,28 @@ function checkCart() {
             })
 
             $('#cart-count').text(result.count)
+        }
+    })
+}
+
+function payOrder(id, total) {
+    $('#pay-msg').hide()
+    $('#no-money').hide()
+    $('#pay-fail').hide()
+    $('#pay-order-msg').text('')
+
+    $.ajax({
+        url: 'http://localhost:8080/Homepage/payOrder/' + id + '/' + total,
+        success: function(result) {
+            if (result.message == 2) {
+                $('#pay-msg').show()
+                $('#pay-order-msg').text('Order No. ' + id + ' has been paid!')
+                orderHistory()
+            } else
+                $('#no-money').show()
+        },
+        error: function() {
+            $('#pay-fail').hide()
         }
     })
 }

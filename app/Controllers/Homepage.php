@@ -169,4 +169,21 @@ class Homepage extends BaseController
 
         return $this->response->setJSON($history);
     }
+
+    public function payOrder(int $order_id, int $total)
+    {
+        session();
+
+        $wallet = new Wallet();
+        $amount = $wallet->getAmount($_SESSION['id']);
+
+        if ($amount < $total)
+            return $this->response->setJSON(['message' => 1]);
+
+        $wallet->updateWallet($_SESSION['id'], -$total);
+        $order = new Order();
+        $order->updateOrder($order_id, 'paid');
+
+        return $this->response->setJSON(['message' => 2]);
+    }
 }
