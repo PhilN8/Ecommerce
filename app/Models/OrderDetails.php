@@ -29,4 +29,9 @@ class OrderDetails extends Model
 
         // return $this->getInsertID();
     }
+
+    public function receipt(int $order_id)
+    {
+        return $this->select('tbl_products.product_name, product_price, order_quantity, orderdetails_total')->join('tbl_products', 'tbl_products.product_id = tbl_orderdetails.product_id')->where('order_id', $order_id)->findAll();
+    }
 }

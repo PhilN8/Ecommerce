@@ -2,12 +2,17 @@
 
 namespace App\Controllers;
 
+// namespace App\Libraries;
+
 use App\Models\SubCategory;
 use App\Models\Wallet;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderDetails;
+use App\Models\PaymentType;
+
+use PDF;
 
 class Homepage extends BaseController
 {
@@ -113,40 +118,59 @@ class Homepage extends BaseController
                 $product = new Product();
 
                 $count = count($_SESSION['orders']);
+                $pay = intval($this->request->getVar('pay-type'));
 
-                $details = [
-                    "customer_id" => $_SESSION['id'],
-                    'payment_type' => 1,
+                $rules = [
+                    'pay-type' => [
+                        'rules' => 'required|integer',
+                        'label' => 'Payment Type',
+                        'errors' => [
+                            'required' => 'The payment type is missing. Choose a method of payment',
+                            'integer' => 'Invalid payment type chosen'
+                        ]
+                    ]
                 ];
 
-                $total_cost = 0;
+                if ($this->validate($rules)) {
 
-                $order_id = $order->newOrder($details);
-
-                for ($i = 1; $i <= $count; $i++) {
-                    $product_id = $_SESSION['orders'][$i - 1];
-                    $price = $product->getPrice($_SESSION['orders'][$i - 1]);
-                    $quantity = $_POST['order' . $i];
-                    $cost = $price * $quantity;
-
-                    $total_cost += $cost;
-
-                    $new_order = [
-                        'order_id' => $order_id,
-                        'product_id' => $product_id,
-                        'product_price' => $price,
-                        'order_quantity' => $quantity,
-                        'orderdetails_total' => $cost
+                    $details = [
+                        "customer_id" => $_SESSION['id'],
+                        'payment_type' => $pay,
                     ];
 
-                    $order_detail->newOrderDetail($new_order);
+                    $total_cost = 0;
+
+                    $order_id = $order->newOrder($details);
+
+                    for ($i = 1; $i <= $count; $i++) {
+                        $product_id = $_SESSION['orders'][$i - 1];
+                        $price = $product->getPrice($_SESSION['orders'][$i - 1]);
+                        $quantity = $_POST['order' . $i];
+                        $cost = $price * $quantity;
+
+                        $total_cost += $cost;
+
+                        $new_order = [
+                            'order_id' => $order_id,
+                            'product_id' => $product_id,
+                            'product_price' => $price,
+                            'order_quantity' => $quantity,
+                            'orderdetails_total' => $cost
+                        ];
+
+                        $order_detail->newOrderDetail($new_order);
+                    }
+
+                    $order->updateTotal($order_id, $total_cost);
+                    $_SESSION['orders'] = [];
+
+                    $data['complete'] = 1;
+                    echo view('frontend/homepage', $data);
+                } else {
+                    $data['incomplete'] = 1;
+                    $data['validation'] = $this->validator;
+                    echo view('frontend/homepage', $data);
                 }
-
-                $order->updateTotal($order_id, $total_cost);
-                $_SESSION['orders'] = [];
-
-                $data['complete'] = 1;
-                echo view('frontend/homepage', $data);
             }
 
             if ($this->request->getVar('delete-order') != null) {
@@ -185,5 +209,68 @@ class Homepage extends BaseController
         $order->updateOrder($order_id, 'paid');
 
         return $this->response->setJSON(['message' => 2]);
+    }
+
+    public function getPaymentTypes()
+    {
+        $payment = new PaymentType();
+        return $this->response->setJSON($payment->paymentTypes());
+    }
+
+    public function receipt(int $order_id)
+    {
+        session();
+        $this->response->setHeader('Content-Type', 'application/pdf');
+
+        $order = new Order();
+        $receipt = $order->receipt($order_id);
+
+        $orderDetails = new OrderDetails();
+        $details = $orderDetails->receipt($order_id);
+
+        // return $this->response->setJSON($details);
+
+        $pdf = new PDF();
+        $pdf->AddPage();
+        $pdf->AliasNbPages();
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->Cell(40, 10, 'User ID: ' . $_SESSION['id']);
+        $pdf->Cell(40, 10, 'Name: ' . $_SESSION['name']);
+        // $pdf->Cell(40, 10, 'ID: ' . $receipt['order_id']);
+        // $pdf->Cell(40, 10, 'ID: ' . $receipt['order_id']);
+        $pdf->Ln();
+        $pdf->Ln();
+        // $pdf->Cell(40, 10, 'Order');
+
+        $pdf->Cell(40, 10, 'Order ID: ' . $receipt['order_id']);
+        $pdf->Ln();
+        $pdf->Cell(40, 10, 'Amount: ' . $receipt['order_amount']);
+        $pdf->Ln();
+        $pdf->Cell(40, 10, 'Date: ' . substr($receipt['created_at'], 0, 10));
+        $pdf->Ln();
+        $pdf->Ln();
+        $pdf->Cell(40, 10, 'ORDER DETAILS');
+        $pdf->Ln();
+
+        $headings = ['Product', 'Unit Price', 'Quantity', 'Total Per Item'];
+
+        foreach ($headings as $header => $value)
+            $pdf->Cell(40, 10, $value, 1);
+        //  Order details
+        $pdf->SetFont('Arial', '', 12);
+
+        foreach ($details as $key => $value) {
+            $pdf->Ln();
+
+            foreach ($value as $column) {
+                // print_r($column);
+
+                $pdf->Cell(40, 12, $column, 1);
+            }
+        }
+
+        $filename = substr($receipt['created_at'], 0, 10) . "_" . $order_id;
+
+        $pdf->Output('', $filename);
     }
 }

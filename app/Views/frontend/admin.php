@@ -46,20 +46,21 @@ ini_set('display_errors', '1');
 <body style="background-color: #eee;">
 
     <nav class="w3-sidebar w3-bar-block w3-light-grey w3-card" style="width: 20%; float: left;">
+        <button class="w3-bar-item w3-button tablinks w3-blue" onclick="showSection(event, 'intro')">Home</button><br>
+
         <h5 class="w3-bar-item w3-black" style="margin-top: 0; margin-bottom: 0;">Users</h5>
-        <button class="w3-bar-item w3-button tablinks w3-blue" onclick="showSection(event, 'intro')">Home</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'new-admin-section')">Add an Admin</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'view-users-section'); loadTable(0, 0)">View Users</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'edit-users-section'); loadTable(0, 1)">Edit Users</button><br>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'view-users-section'); loadTable(0, 0)">View</button>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'edit-users-section'); loadTable(0, 1)">Edit</button><br>
 
         <h5 class="w3-bar-item w3-black" style="margin-bottom: 0;">Add</h5>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'category-section')">Add New Category</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'sub-category-section')">Add New Sub-Category</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'product-section'); loadSubs()">Add Product</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'payment-section'); loadSubs()">Add Payment Type</button><br/>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'new-admin-section')">Admin</button>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'category-section')">Category</button>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'sub-category-section')">Sub-Category</button>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'product-section'); loadSubs()">Product</button>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'payment-section'); loadSubs()">Payment Type</button><br/>
 
         <h5 class="w3-bar-item w3-black" style="margin-bottom: 0;">Orders</h5>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event,'order-section')">View Orders</button><br/>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event,'order-section')">View</button><br/>
 
         <a class="w3-bar-item w3-button w3-hover-red tablinks" href="<?= base_url('/logout') ?>">Logout</a>
 
@@ -311,7 +312,7 @@ ini_set('display_errors', '1');
             <p id="payment-result" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br>
 
             <label for="payment-description">Description:</label>
-            <input type="text" name="payment-description" id="payment-description" class="w3-input">
+            <input type="text" name="payment-description" id="payment-description" class="w3-input"><br>
             <button class="w3-button w3-center w3-margin-left w3-teal w3-hover-black w3-animate-opacity" onclick="newPayment()">Complete</button>
 
         </section>

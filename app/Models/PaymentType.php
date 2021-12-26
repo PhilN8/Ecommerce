@@ -33,4 +33,10 @@ class PaymentType extends Model
 
         return false;
     }
+
+    public function paymentTypes()
+    {
+        return $this->select('paymenttype_id, paymenttype_name')->where([])->get()->getResultArray();
+        // return $this->findAll();
+    }
 }

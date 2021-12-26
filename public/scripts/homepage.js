@@ -2,6 +2,7 @@ $(function() {
     checkCart()
     orderHistory()
     getCats()
+    paymentTypes()
 })
 
 function addToWallet(id) {
@@ -108,10 +109,13 @@ function getAmount(id) {
     $.ajax({
         url: 'http://localhost:8080/Homepage/getWallet/' + id,
         success: function(result) {
-            if (result.amount == null)
+            if (result.amount == null) {
+                $('#wallet-amt').text('Ksh. 0')
                 $('#wallet-amount').text("No money in wallet!")
-            else
+            } else {
+                $('#wallet-amt').text('Ksh. ' + result.amount)
                 $('#wallet-amount').text("Amount: " + result.amount)
+            }
 
         }
     })
@@ -150,7 +154,7 @@ function orderHistory() {
                 i.order_status = i.order_status.toLowerCase().replace(/\b[a-z]/g, function(letter) {
                     return letter.toUpperCase()
                 });
-                $('#history-table').append('<tr><td>' + i.order_id + '</td><td>' + i.order_amount + '</td><td>' + i.order_status + '</td><td>' + i.created_at.slice(0, 10) + '</td><tr>')
+                $('#history-table').append('<tr><td>' + i.order_id + '</td><td>' + i.order_amount + '</td><td>' + i.order_status + '</td><td>' + i.created_at.slice(0, 10) + '</td><td><a target="_blank" href="http://localhost:8080/receipt/' + i.order_id + '" class="w3-button w3-teal">Receipt</a></td><tr>')
                 if(i.order_status == 'Pending Payment')
                     $('#order-table').append('<tr><td>' + i.order_id + '</td><td>' + i.order_amount + '</td><td>' + i.order_status + '</td><td>' + i.created_at.slice(0, 10) + '</td><td><button class="w3-aqua w3-button" onclick="payOrder(' + i.order_id + ',' + i.order_amount + ')">Pay</button></td><tr>')
             })
@@ -194,6 +198,17 @@ function payOrder(id, total) {
         },
         error: function() {
             $('#pay-fail').hide()
+        }
+    })
+}
+
+function paymentTypes() {
+    $.ajax({
+        url: 'http://localhost:8080/Homepage/getPaymentTypes',
+        success: function(result) {
+            $.each(result, function(x, i) {
+                $('#payment-type').append('<option value="' + i.paymenttype_id +'">' + i.paymenttype_name + '</option>')
+            })
         }
     })
 }

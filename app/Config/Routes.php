@@ -44,6 +44,7 @@ $routes->get('/subcategory/(:any)/(:num)', 'Admin::newSub/$1/$2');
 $routes->get('/newProduct/(.+)', 'Admin::newProduct/$1/$2/$3/$4');
 $routes->get('/wallet/(:num)/(:num)', 'Homepage::wallet/$1/$2');
 $routes->get('/newPayment/(:any)', 'Admin::newPayment/$1/$2');
+$routes->get('/receipt/(:num)', 'Homepage::receipt/$1');
 // $routes->match(['get', 'post'], 'frontend/login', 'Form::index');
 
 /*

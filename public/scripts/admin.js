@@ -329,7 +329,10 @@ function orders() {
                 i.order_status = i.order_status.toLowerCase().replace(/\b[a-z]/g, function(letter) {
                     return letter.toUpperCase()
                 });
-                $('#order-table').append('<tr><td>' + i.order_id + '</td><td>' + i.order_amount + '</td><td>' + i.order_status + '</td><td>' + i.created_at.slice(0, 10) + '</td><td><button class="w3-button w3-amber" onclick="updateOrder(' + i.order_id + ')">Update</button><tr>')
+                if(i.order_status == 'Pending')
+                    $('#order-table').append('<tr><td>' + i.order_id + '</td><td>' + i.order_amount + '</td><td>' + i.order_status + '</td><td>' + i.created_at.slice(0, 10) + '</td><td><button class="w3-button w3-amber" onclick="updateOrder(' + i.order_id + ')">Update</button></td><tr>')
+                else
+                    $('#order-table').append('<tr><td>' + i.order_id + '</td><td>' + i.order_amount + '</td><td>' + i.order_status + '</td><td>' + i.created_at.slice(0, 10) + '</td><td></td><tr>')
             })
         }
     })

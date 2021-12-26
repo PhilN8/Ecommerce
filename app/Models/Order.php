@@ -47,5 +47,8 @@ class Order extends Model
         $this->update($id, ['order_status' => $update]);
     }
 
-
+    public function receipt(int $order_id)
+    {
+        return $this->find($order_id);
+    }
 }

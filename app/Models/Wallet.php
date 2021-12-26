@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
-use phpDocumentor\Reflection\Types\Mixed_;
 
 class Wallet extends Model
 {
