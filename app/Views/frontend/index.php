@@ -41,7 +41,7 @@
         </div>
 
         <div class="button" id="fifty">
-            <a href="register.php"><button class="button" style="vertical-align:middle"><span>Join Now </span></button></a>
+            <a href="<?= base_url('/register') ?>"><button class="button" style="vertical-align:middle"><span>Join Now </span></button></a>
         </div>
 
         <div class="w3-row" style="background-color: #fff;">

@@ -103,7 +103,7 @@
 
             <p hidden id="product-result" class="w3-text-red"></p>
 
-            <div class="w3-row-padding" id="product-images" style="height: 100px;">
+            <div class="w3-row-padding" id="product-images">
                 <!-- LOAD PRODUCT IMAGES HERE -->
             </div>
         </section>

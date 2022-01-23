@@ -27,7 +27,7 @@ class Registration extends BaseController
                     'first_name' => $fname,
                     'last_name' => $lname,
                     'email' => $email,
-                    '`password`' => $pass,
+                    '`password`' => password_hash($pass, PASSWORD_DEFAULT),
                     'gender' => $gender,
                 ];
 
@@ -35,7 +35,7 @@ class Registration extends BaseController
                     'first_name' => $fname,
                     'last_name' => $lname,
                     'email' => $email,
-                    '`password`' => $pass,
+                    '`password`' => password_hash($pass, PASSWORD_DEFAULT),
                     'gender' => $gender,
                     'role' => $role
                 ];
