@@ -55,7 +55,12 @@ $routes->post('users','Users::byEmail');
 # API ROUTES === PRODUCTS
 $routes->get('products','Products::index');
 $routes->get('products/(:num)','Products::show/$1');
-$routes->get('products/(:any)/(:any)','Products::search/$1/$2');
+$routes->get('products/(.+)','Products::search/$1/$2');
+
+# API ROUTES === TRANSACTIONS
+$routes->get('transactions','Transactions::index');
+$routes->get('transactions/(:num)','Transactions::show/$1');
+$routes->get('transactions/(.+)','Transactions::search/$1/$2');
 
 
 /*

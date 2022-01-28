@@ -7,7 +7,12 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class Products extends BaseController
 {
-    public function index() {
+    /**
+     * Get all products
+     * @return ResponseInterface
+     */
+    public function index(): ResponseInterface
+    {
         $model = new Product();
         return $this->getResponse(
             [
@@ -21,7 +26,7 @@ class Products extends BaseController
      * Searches for a product via id
      * @return ResponseInterface
      */
-    public function show($id)
+    public function show($id): ResponseInterface
     {
         $model = new Product();
         $product = $model->find($id);
@@ -42,9 +47,14 @@ class Products extends BaseController
 
     /**
      * Displays products by category and/or subcategory
+     * @param string|null $category - required
+     * @param string|null $subcategory - optional
+     *
+     * @return ResponseInterface
      */
 
-    public function search($category = null, string $subcategory = null) {
+    public function search(string $category = null, string $subcategory = null): ResponseInterface
+    {
         $db = db_connect();
 
         if ($category === null)
@@ -53,21 +63,31 @@ class Products extends BaseController
                 ResponseInterface::HTTP_BAD_REQUEST);
 
         $category = $this->sanitize($category);
-        $subcategory = $this->sanitize($subcategory);
 
-        if ($subcategory == null)
-            $result = $db->query("SELECT * FROM `tbl_products` WHERE `subcategory_id` IN 
-                                   (SELECT subcategory_id FROM tbl_subcategories where `category` = 
-                                    (SELECT category_id FROM tbl_categories WHERE category_name = '$category'))");
-        else
-            $result = $db->query("SELECT * FROM `tbl_products` WHERE `subcategory_id` IN 
-                                   (SELECT subcategory_id FROM tbl_subcategories where `subcategory_name` = '$subcategory'
-                                     AND category = 
-                                         (SELECT category_id FROM tbl_categories WHERE category_name = '$category'))");
+        if ($subcategory == null) {
+            $result = $db->query(
+                "SELECT * FROM `tbl_products` WHERE `subcategory_id` IN 
+                    (SELECT subcategory_id FROM tbl_subcategories where `category` = 
+                    (SELECT category_id FROM tbl_categories WHERE category_name = '$category'))");
+
+            $message = 'Products of category ' . $category . ' retrieved successfully';
+        } else {
+            $subcategory = $this->sanitize($subcategory);
+
+            $result = $db->query(
+                "SELECT * FROM `tbl_products` WHERE `subcategory_id` IN 
+                    (SELECT subcategory_id FROM tbl_subcategories where `subcategory_name` = '$subcategory'
+                    AND category = (SELECT category_id FROM tbl_categories WHERE category_name = '$category'))");
+
+            $message = 'Products of Category: ' . $category . ', Subcategory: ' . $subcategory . ' retrieved successfully';
+        }
 
         $rows = [];
         foreach ($result->getResult('array') as $row)
             $rows[] = $row;
+
+        if ($result->getNumRows() < 1)
+            return $this->getResponse(['message' => 'No Records found']);
 
         return $this->getResponse(
             [
@@ -75,10 +95,6 @@ class Products extends BaseController
                 'products' => $rows
             ]
         );
-//            array_push($rows, $row);
-//            print_r($row);
-
-//        return $this->response->setJSON($rows);
     }
 
     private function sanitize($data)
@@ -87,31 +103,5 @@ class Products extends BaseController
         $data = strtolower($data);
         $data = ucfirst($data);
         return $data;
-    }
-
-    public function bySubcategory($subcategory = null)
-    {
-        $db = db_connect();
-
-        if ($subcategory === null)
-            return $this->getResponse(
-                ['message' => 'No Category chosen'],
-                ResponseInterface::HTTP_BAD_REQUEST);
-
-        $subcategory = $this->sanitize($subcategory);
-        $result = $db->query("SELECT * FROM `tbl_products` WHERE `subcategory_id` IN 
-                                   (SELECT subcategory_id FROM tbl_subcategories where `subcategory_name` = '$subcategory'
-                                    )");
-
-        $rows = [];
-        foreach ($result->getResult('array') as $row)
-            $rows[] = $row;
-
-        return $this->getResponse(
-            [
-                'message' => 'Products of category ' . $subcategory . ' retrieved successfully',
-                'products' => $rows
-            ]
-        );
     }
 }

@@ -64,7 +64,7 @@ class BaseController extends Controller
     public function getRequestInput(IncomingRequest $request) {
         $input = $request->getPost();
         if (empty($input))
-            $input = json_decode($request->getBody, true);
+            $input = json_decode($request->getBody(), true);
 
         return $input;
     }
