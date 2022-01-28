@@ -48,10 +48,14 @@ $routes->get('/receipt/(:num)', 'Homepage::receipt/$1');
 // $routes->match(['get', 'post'], 'frontend/login', 'Form::index');
 
 # API ROUTES === USERS
-
 $routes->get('users','Users::index');
 $routes->get('users/(:num)','Users::show/$1');
 $routes->post('users','Users::byEmail');
+
+# API ROUTES === PRODUCTS
+$routes->get('products','Products::index');
+$routes->get('products/(:num)','Products::show/$1');
+$routes->get('products/(:any)/(:any)','Products::search/$1/$2');
 
 
 /*
