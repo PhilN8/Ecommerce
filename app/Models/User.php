@@ -65,9 +65,9 @@ class User extends Model
     public function findUserByEmailAddress(string $emailAddress)
     {
         $user = $this
-            ->asArray()
-            ->where(['email' => $emailAddress])
-            ->first();
+            ->select('user_id, first_name, last_name, email, gender, role')
+            ->where('email', $emailAddress)
+            ->get()->getResultArray();
 
         if (!$user)
             throw new Exception('User does not exist for specified email address');

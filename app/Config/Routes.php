@@ -47,6 +47,13 @@ $routes->get('/newPayment/(:any)', 'Admin::newPayment/$1/$2');
 $routes->get('/receipt/(:num)', 'Homepage::receipt/$1');
 // $routes->match(['get', 'post'], 'frontend/login', 'Form::index');
 
+# API ROUTES === USERS
+
+$routes->get('users','Users::index');
+$routes->get('users/(:num)','Users::show/$1');
+$routes->post('users','Users::byEmail');
+
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing
