@@ -60,7 +60,7 @@
 
         <section id="wallet-section" class="home-section w3-animate-opacity" style="width: 80%; margin: auto; display: none;">
 
-            <div class="w3-display-container w3-container w3-green w3-section" style="width: 80%; margin: auto; display: none;" id="wallet-msg">
+            <div class="w3-display-container w3-container w3-green w3-section" style="display: none;" id="wallet-msg">
                 <span onclick="this.parentElement.style.display='none'; $('#wallet').val('')" class="w3-button w3-large w3-display-topright">&times;</span>
                 <h3>Success</h3>
                 <p>Funds have been added to your wallet...</p>

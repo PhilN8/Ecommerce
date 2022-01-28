@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
-
+use Exception;
 
 class User extends Model
 {
@@ -12,7 +12,6 @@ class User extends Model
     protected $primaryKey = 'user_id';
 
     protected $allowedFields = [
-        # 'user_id',
         'first_name',
         'last_name',
         'email',
@@ -21,6 +20,7 @@ class User extends Model
         'role'
     ];
 
+    protected $useSoftDeletes = true;
     protected $deletedField = 'is_deleted';
 
     public function getUsers(int $role = null)
@@ -60,5 +60,18 @@ class User extends Model
             return true;
         else
             return false;
+    }
+
+    public function findUserByEmailAddress(string $emailAddress)
+    {
+        $user = $this
+            ->asArray()
+            ->where(['email' => $emailAddress])
+            ->first();
+
+        if (!$user)
+            throw new Exception('User does not exist for specified email address');
+
+        return $user;
     }
 }
