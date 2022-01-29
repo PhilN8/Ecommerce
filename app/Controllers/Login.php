@@ -33,9 +33,9 @@ class Login extends BaseController
     {
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $userModel = new User();
-            $data = $userModel->where('email', $email)->first();
+            $data = $userModel->where('email', $email)->get()->getResultArray()[0];
 
-            if ($data) {
+            if ($data != null) {
 
                 $pass = $data['password'];
 

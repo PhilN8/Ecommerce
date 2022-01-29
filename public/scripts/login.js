@@ -34,7 +34,7 @@ function checkEmail() {
                 else
                     window.location.href = "http://localhost:8080/admin";
             }
-        },
+            },
         error: function() {
             $("#emailResult").show().text("* Login Authentication failed...");
         }

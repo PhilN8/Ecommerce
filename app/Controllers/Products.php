@@ -24,6 +24,7 @@ class Products extends BaseController
 
     /**
      * Searches for a product via id
+     * @param $id
      * @return ResponseInterface
      */
     public function show($id): ResponseInterface
@@ -70,7 +71,7 @@ class Products extends BaseController
                     (SELECT subcategory_id FROM tbl_subcategories where `category` = 
                     (SELECT category_id FROM tbl_categories WHERE category_name = '$category'))");
 
-            $message = 'Products of category ' . $category . ' retrieved successfully';
+            $message = 'Products of Category: ' . $category . ' retrieved successfully';
         } else {
             $subcategory = $this->sanitize($subcategory);
 
@@ -91,17 +92,19 @@ class Products extends BaseController
 
         return $this->getResponse(
             [
-                'message' => 'Products of category ' . $category . ' retrieved successfully',
+                'message' => $message,
                 'products' => $rows
             ]
         );
     }
 
-    private function sanitize($data)
+    /**
+     * Validates string for better results
+     * @param string $data
+     * @return string
+     */
+    private function sanitize(string $data) : string
     {
-        $data = trim($data);
-        $data = strtolower($data);
-        $data = ucfirst($data);
-        return $data;
+        return ucfirst(strtolower(trim($data)));
     }
 }

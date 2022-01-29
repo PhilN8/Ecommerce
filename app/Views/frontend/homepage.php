@@ -10,11 +10,12 @@
     <link rel="stylesheet" href="<?= base_url('/css/homepage.css') ?>">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="<?= base_url('/scripts/homepage.js') ?>"></script>
 </head>
 
 <body>
-    <nav class="w3-sidebar w3-bar-block w3-light-grey w3-card" style="width: 20%; float: left;">
+    <!-- <nav class="w3-sidebar w3-bar-block w3-light-grey w3-card" style="width: 20%; float: left;">
         <h5 class="w3-bar-item w3-black" style="margin-top: 0; margin-bottom: 0;">Users</h5>
         <button class="w3-bar-item w3-button tablinks w3-blue" onclick="showSection(event, 'intro')">Home</button>
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'history-section'); orderHistory()">History</button>
@@ -26,9 +27,30 @@
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'view-cart-section');">View Cart <span class="w3-orange w3-round w3-text-white" id="cart-count"><?php echo (count($_SESSION['orders']) > 0) ? count($_SESSION['orders']) : "" ?></span></button><br>
 
         <a class="w3-bar-item w3-button w3-hover-red tablinks" href="<?= base_url('/logout') ?>">Logout</a>
-    </nav>
+    </nav> -->
 
-    <main style="width: 80%; float: right;">
+    <header class="w3-top">
+        <h1 class="logo">Soko la Njue</h1>
+<!--        <img src="../img/logo2.png" alt="LOGO" class="logo">-->
+
+        <input type="checkbox" id="nav-toggle" class="nav-toggle">
+        <nav>
+            <ul>
+                <!-- <li><button onclick="openSection('intro')">Intro</button></li> -->
+                <li><button onclick="openSection('wallet-section')">Wallet</button></li>
+                <li><button onclick="openSection('view-products-section')">Shop</button></li>
+                <li><button onclick="openSection('view-cart-section')">Cart</button></li>
+                <li><button onclick="openSection('pay-order-section')">Pay</button></li>
+                <li><button onclick="openSection('history-section')">History</button></li>
+                <li><a href="<?= base_url('/logout') ?>">Logout</a></li>
+            </ul>
+        </nav>
+        <label for="nav-toggle" class="nav-toggle-label">
+            <span></span>
+        </label>
+    </header>
+
+    <main style="">
 
         <?php if (isset($delete)) :  ?>
             <div class="w3-section w3-center w3-container w3-blue w3-display-container" style="width: 80%; margin: auto">
@@ -66,7 +88,7 @@
                 <p>Funds have been added to your wallet...</p>
             </div>
 
-            <h1>Add to Wallet</h1>
+            <h1 class="section_titles">Add to Wallet</h1>
 
             <label for="wallet">Enter amount</label>
             <input type="text" class="w3-input" id="wallet">
@@ -93,7 +115,7 @@
                 <p>Product already added to Cart</p>
             </div>
 
-            <h1>View Products</h1>
+            <h1 class="section_titles">View Products</h1>
 
             <label for="category-list">Choose Category</label>
             <select name="" id="category-list" onchange="getSubs()"></select>
@@ -103,13 +125,17 @@
 
             <p hidden id="product-result" class="w3-text-red"></p>
 
-            <div class="w3-row-padding" id="product-images">
+<!--            <div class="w3-row-padding" id="product-images">-->
                 <!-- LOAD PRODUCT IMAGES HERE -->
+<!--            </div>-->
+
+            <div class="small-container" id="product-images">
+<!--             LOAD PRODUCT IMAGES HERE -->
             </div>
         </section>
 
         <section id="view-cart-section" class="home-section w3-animate-opacity" style="width: 80%; margin: auto; display: none;">
-            <h1>Cart</h1>
+            <h1 class="section_titles">Cart</h1>
             <form method="POST" action="<?= base_url('Homepage/updateOrder') ?>" class="w3-center">
                 <table>
                     <thead>
@@ -153,7 +179,7 @@
                 <p>Try again later...</p>
             </div>
 
-            <h1>Pay for Current Orders</h1>
+            <h1 class="section_titles">Pay for Current Orders</h1>
             <table>
                 <thead>
                     <tr>
@@ -168,7 +194,7 @@
         </section>
 
         <section id="history-section" class="home-section w3-animate-opacity" style="width: 80%; margin: auto; display: none;">
-            <h1 class="w3-center">History of Orders</h1>
+            <h1  class="section_titles">History of Orders</h1>
 
             <table>
                 <thead>

@@ -25,11 +25,32 @@
 </head>
 
 <body>
-    <ul class="navigation"><span class="my-name">SOKO la njue</span>
-        <li><a href="<?= base_url('/') ?>">home</a></li>
-        <!--        <li><a href="menu.php">menu</a></li>-->
-        <li style="float: right;"><a href="<?= base_url('register') ?>">sign up</a></li>
-    </ul>
+    <nav class="navbar">
+        <div class="brand-title">Soko la Njue</div>
+        <a href="#" class="toggle-button">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </a>
+        <div class="navbar-links">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <!--                <li><a href="#">About</a></li>-->
+                <!--                <li><a href="#">Contact</a></li>-->
+<!--                <li><a href="--><?//= base_url('/login')?><!--">Login</a></li>-->
+                <li><a href="<?= base_url('/register')?>">Sign Up</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <script>
+        const toggleButton = document.getElementsByClassName('toggle-button')[0]
+        const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+
+        toggleButton.addEventListener('click', () => {
+            navbarLinks.classList.toggle('active')
+        })
+    </script>
 
     <main style="margin: auto; width: 60%;">
 
@@ -68,7 +89,7 @@
 
             <div class="w3-container w3-teal">
                 <h1>Login</h1>
-                <p>Log back in to order more food!</p>
+                <p>Log back in to order more clothes!</p>
             </div>
 
             <div class="w3-container">

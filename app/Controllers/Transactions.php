@@ -26,6 +26,7 @@ class Transactions extends BaseController
 
     /**
      * Searches an order by id, and show its order details
+     * @param $id
      * @return ResponseInterface
      */
     public function show($id): ResponseInterface
@@ -104,9 +105,13 @@ class Transactions extends BaseController
         );
     }
 
-    private function sanitize($data)
+    /**
+     * Validates string for better results
+     * @param string $data
+     * @return string
+     */
+    private function sanitize(string $data) : string
     {
-        $data = ucfirst(strtolower(trim($data)));
-        return $data;
+        return ucfirst(strtolower(trim($data)));
     }
 }

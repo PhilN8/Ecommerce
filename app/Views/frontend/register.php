@@ -27,12 +27,32 @@
 </head>
 
 <body>
-    <?php ini_set('display_errors', 1); ?>
-    <ul class="navigation" style="margin: 0;"><span class="my-name">SOKO la njue</span>
-        <li><a href="<?= base_url('/') ?>">home</a></li>
-        <li><a href="menu.php">menu</a></li>
-        <li style="float: right;"><a href="<?= base_url('login') ?>">login</a></li>
-    </ul>
+    <nav class="navbar">
+        <div class="brand-title">Soko la Njue</div>
+        <a href="#" class="toggle-button">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </a>
+        <div class="navbar-links">
+            <ul>
+                <li><a href="#">Home</a></li>
+<!--                <li><a href="#">About</a></li>-->
+<!--                <li><a href="#">Contact</a></li>-->
+                <li><a href="<?= base_url('/login')?>">Login</a></li>
+<!--                <li><a href="--><?//= base_url('/register')?><!--">Sign Up</a></li>-->
+            </ul>
+        </div>
+    </nav>
+
+    <script>
+        const toggleButton = document.getElementsByClassName('toggle-button')[0]
+        const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+
+        toggleButton.addEventListener('click', () => {
+            navbarLinks.classList.toggle('active')
+        })
+    </script>
 
     <div class="w3-display-container w3-container w3-red w3-section" style="margin: auto; width: 60%; display: none;" id="reg-failed-msg">
         <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
@@ -66,7 +86,7 @@
 
             <div class="w3-container w3-teal">
                 <h1>Register to Soko La Njue</h1>
-                <p>Sign up to enjoy our delicious food!</p>
+                <p>Sign up to upgrade your wardrobe!</p>
             </div>
 
             <form class="w3-container" method="POST" action="<?= base_url('/Registration/registerUser') ?>">

@@ -2,11 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Models\API_User;
 use App\Models\User;
 use CodeIgniter\HTTP\ResponseInterface;
 use Exception;
-use phpDocumentor\Reflection\Types\This;
 
 class Users extends BaseController
 {
@@ -14,7 +12,8 @@ class Users extends BaseController
      * Returns all users
      * @return ResponseInterface
      */
-    public function index() {
+    public function index() : ResponseInterface
+    {
 
         $model = new User();
         $all = $model->select('user_id, first_name, last_name, email, gender, role')->get()->getResultArray();
@@ -31,17 +30,18 @@ class Users extends BaseController
 
     /**
      * Get a single user by ID
+     * @param int $id - ID to search by
+     *
+     * @return ResponseInterface
      */
-    public function show(int $id)
+    public function show(int $id) : ResponseInterface
     {
         try {
 
             $model = new User();
-            $user = $model->get()->getResultArray()[0];
+            $user = $model->where('user_id', $id)->get()->getResultArray()[0];
             unset($user['password']);
 
-//            print_r($user);
-//            var_dump($user);
 
             return $this->getResponse(
                 [
@@ -64,7 +64,7 @@ class Users extends BaseController
      * Searches for user via email
      * @return ResponseInterface
      */
-    public function byEmail()
+    public function byEmail(): ResponseInterface
     {
         $rules = [
           'email' => 'required|valid_email'
@@ -102,7 +102,7 @@ class Users extends BaseController
      * Gets all male users
      * @return ResponseInterface
      */
-    public function male()
+    public function male() : ResponseInterface
     {
         $model = new User();
         $males = $model->select('user_id, first_name, last_name, email, role')
@@ -120,7 +120,7 @@ class Users extends BaseController
      * Gets all female users
      * @return ResponseInterface
      */
-    public function female()
+    public function female() : ResponseInterface
     {
         $model = new User();
         $females = $model->select('user_id, first_name, last_name, email, role')

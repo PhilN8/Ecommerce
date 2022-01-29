@@ -3,8 +3,6 @@
 namespace App\Controllers;
 
 use App\Models\API_User;
-use App\Models\User;
-use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\ResponseInterface;
 use Exception;
 use ReflectionException;
