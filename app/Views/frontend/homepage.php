@@ -78,7 +78,7 @@
             <div class="w3-section w3-center w3-container w3-blue w3-display-container" style="width: 80%; margin: auto;">
                 <span onclick="this.parentElement.style.display='none';" class="w3-button w3-large w3-display-topright">&times;</span>
                 <h1>Order Partially Completed</h1>
-                <p>The following items are out of stock:</p>
+                <p>The following items are currently less than quantity requested:</p>
                 <?php for($i = 0; $i < $count; $i++) {
                     echo '<p>'. $check[$i]. ' </p>';
                  }?>

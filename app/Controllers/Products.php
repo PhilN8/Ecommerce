@@ -53,7 +53,6 @@ class Products extends BaseController
      *
      * @return ResponseInterface
      */
-
     public function search(string $category = null, string $subcategory = null): ResponseInterface
     {
         $db = db_connect();
@@ -88,11 +87,113 @@ class Products extends BaseController
             $rows[] = $row;
 
         if ($result->getNumRows() < 1)
-            return $this->getResponse(['message' => 'No Records found']);
+            return $this->getResponse(
+                ['message' => 'No Records found'],
+                ResponseInterface::HTTP_NOT_FOUND);
 
         return $this->getResponse(
             [
                 'message' => $message,
+                'products' => $rows
+            ]
+        );
+    }
+
+    /**
+     * Searches for all products with the pattern/search term provided
+     * @param string $pattern - required
+     * @return ResponseInterface
+     */
+    public function deepSearch(string $pattern): ResponseInterface
+    {
+        $pattern = trim($pattern);
+        $input = ['pattern' => $pattern];
+        $rules = [
+            'pattern' => [
+                'rules' => 'required',
+                'label' => 'Search Pattern',
+                'errors' => [
+                    'required' => 'The search pattern is required'
+                ]
+            ]
+        ];
+        $db = db_connect();
+
+        if (!$this->validateRequest($input, $rules))
+            return $this->getResponse(
+                $this->validator->getErrors(),
+                ResponseInterface::HTTP_BAD_REQUEST
+            );
+
+        $result = $db->query("SELECT * FROM `tbl_products` WHERE `product_name` LIKE '%$pattern%'");
+
+        $rows = [];
+        foreach ($result->getResult('array') as $row)
+            $rows[] = $row;
+
+        if ($result->getNumRows() < 1)
+            return $this->getResponse(
+                ['message' => 'No Records found'],
+                ResponseInterface::HTTP_NOT_FOUND
+            );
+
+        return $this->getResponse(
+            [
+                'message' => "Products with the pattern {" . $pattern . "} : ",
+                'products' => $rows
+            ]
+        );
+    }
+
+    /**
+     * Returns all products that have a sales volume greater than or equals to the value provided
+     * @param $value - amount to filter
+     * @return ResponseInterface
+     */
+    public function sales($value) : ResponseInterface
+    {
+        $input = ['value' => $value];
+        $rules = [
+            'value' => [
+                'rules' => 'required|decimal|greater_than_equal_to[500]',
+                'label' => 'Value',
+                'errors' => [
+                    'required' => 'Value is required for search',
+                    'decimal' => 'Only numbers are allowed',
+                    'greater_than_equal_to[500]' => 'Value must be greater than, or equals to 500'
+                ]
+            ]
+        ];
+
+        $this->db = db_connect();
+
+        if (!$this->validateRequest($input, $rules))
+            return $this->getResponse(
+                $this->validator->getErrors(),
+                ResponseInterface::HTTP_BAD_REQUEST
+            );
+
+        $sql = "SELECT `product_id`, SUM(`orderdetails_total`) as sum FROM `tbl_orderdetails` GROUP BY `product_id`";
+
+        $result = $this->db->query($sql);
+        $rows = [];
+        foreach ($result->getResult('array') as $row)
+            if($row['sum'] > $value) {
+                $model = new Product();
+                $product = $model->find($row['product_id']);
+
+                $rows[] = [
+                    'product_id' => $row['product_id'],
+                    'product_name' => $product['product_name'],
+                    'product_description' => $product['product_description'],
+                    'unit_price' => $product['unit_price'],
+                    'sales_total' => $row['sum']
+                ];
+            }
+
+        return $this->getResponse(
+            [
+                'message' => "Products with a sales volume >= ". $value. ": ",
                 'products' => $rows
             ]
         );

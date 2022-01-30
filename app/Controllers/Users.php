@@ -64,13 +64,15 @@ class Users extends BaseController
      * Searches for user via email
      * @return ResponseInterface
      */
-    public function byEmail(): ResponseInterface
+    public function email(string $email): ResponseInterface
     {
+        $email = trim($email);
+        $input = ['email' => $email];
         $rules = [
           'email' => 'required|valid_email'
         ];
 
-        $input = $this->getRequestInput($this->request);
+//        $input = $this->getRequestInput($this->request);
         if (!$this->validateRequest($input, $rules))
             return $this->getResponse(
                 $this->validator->getErrors(),

@@ -50,16 +50,19 @@ $routes->get('/receipt/(:num)', 'Homepage::receipt/$1');
 # API ROUTES === USERS
 $routes->get('users','Users::index');
 $routes->get('users/(:num)','Users::show/$1');
-$routes->post('users','Users::byEmail');
+$routes->get('users/email/(:any)','Users::email/$1');
 
 # API ROUTES === PRODUCTS
 $routes->get('products','Products::index');
 $routes->get('products/(:num)','Products::show/$1');
+$routes->get('products/sales/(:any)','Products::sales/$1');
+$routes->get('products/search/(:any)','Products::deepSearch/$1');
 $routes->get('products/(.+)','Products::search/$1/$2');
 
 # API ROUTES === TRANSACTIONS
 $routes->get('transactions','Transactions::index');
 $routes->get('transactions/(:num)','Transactions::show/$1');
+$routes->get('transactions/dates/(.+)','Transactions::dates/$1/$2');
 $routes->get('transactions/(.+)','Transactions::search/$1/$2');
 
 

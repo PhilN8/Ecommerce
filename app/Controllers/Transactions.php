@@ -5,9 +5,12 @@ namespace App\Controllers;
 use App\Models\Order;
 use App\Models\OrderDetails;
 use CodeIgniter\HTTP\ResponseInterface;
+use Exception;
 
 class Transactions extends BaseController
 {
+
+    private $db = null;
 
     /**
      * Returns all orders
@@ -95,7 +98,10 @@ class Transactions extends BaseController
             $rows[] = $row;
 
         if ($result->getNumRows() < 1)
-            return $this->getResponse(['message' => 'No Records found']);
+            return $this->getResponse(
+                ['message' => 'No Records found'],
+                ResponseInterface::HTTP_NOT_FOUND
+            );
 
         return $this->getResponse(
             [
@@ -103,6 +109,86 @@ class Transactions extends BaseController
                 'products' => $rows
             ]
         );
+    }
+
+    /**
+     * Returns all transactions between two dates, $startDate and $endDate
+     * @param $startDate - required
+     * @param $endDate - optional, is equated to today if excluded
+     * @return ResponseInterface
+     * @throws Exception
+     */
+    public function dates($startDate, $endDate = null): ResponseInterface
+    {
+        $startDate = $this->sanitize($startDate);
+
+        $db = db_connect();
+        $input = ['startDate' => $startDate];
+        $rules = [
+            'startDate' => [
+                'rules' => 'required|check_date|valid_date[Y-m-d]',
+                'label' => 'Start Date',
+                'errors' => [
+                    'check_date' => 'You cannot add a Start Date after today',
+                    'valid_date' => 'Start Date must of the format yyyy-mm-dd e.g. ' . date('Y-m-d')
+                ]
+            ],
+
+        ];
+
+        if (strlen($endDate) > 0) {
+            $endDate = $this->sanitize($endDate);
+            $input = [
+                'startDate' => $startDate,
+                'endDate' => $endDate
+            ];
+            $rules = [
+                'startDate' => [
+                    'rules' => 'required|check_date|valid_date[Y-m-d]',
+                    'label' => 'Start Date',
+                    'errors' => [
+                        'check_date' => 'You cannot add a Start Date after today',
+                        'valid_date' => 'Start Date must of the format yyyy-mm-dd e.g. ' . date('Y-m-d')
+                    ]
+                ],
+                'endDate' => [
+                    'rules' => 'valid_date[Y-m-d]',
+                    'label' => 'End Date',
+                    'errors' => [
+                        'valid_date' => 'End Date must of the format yyyy-mm-dd e.g. ' . date('Y-m-d')
+                    ]
+                ]
+            ];
+        } else
+            $endDate = (new \DateTime())->format('Y-m-d H:i:s');
+
+        if (!$this->validateRequest($input, $rules))
+            return $this->getResponse(
+                $this->validator->getErrors(),
+                ResponseInterface::HTTP_BAD_REQUEST
+            );
+
+
+        $startDate = (new \DateTime($startDate))->format('Y-m-d H:i:s');
+
+        $result = $db->query("SELECT * FROM `tbl_order` WHERE `created_at` 
+                BETWEEN '$startDate' AND '$endDate'");
+
+        if ($result->getNumRows() < 1)
+            return $this->getResponse(
+                ['message' => 'No Records found'],
+                ResponseInterface::HTTP_NOT_FOUND
+            );
+
+        $rows = [];
+        foreach ($result->getResult('array') as $row)
+            $rows[] = $row;
+
+        return $this->getResponse([
+            'message' => 'Records Found',
+            'orders' => $rows
+        ]);
+
     }
 
     /**

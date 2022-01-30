@@ -66,7 +66,10 @@ class Filters extends BaseConfig
                 'api/*',
                 'api',
                 'users/*',
-                'users'
+                'users',
+                'transactions',
+                'transactions/*',
+                'products/sales/*'
             ],
         ]
     ];
