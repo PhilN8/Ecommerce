@@ -36,7 +36,7 @@
         </a>
         <div class="navbar-links">
             <ul>
-                <li><a href="#">Home</a></li>
+                <li><a href="<?= base_url('/')?>">Home</a></li>
 <!--                <li><a href="#">About</a></li>-->
 <!--                <li><a href="#">Contact</a></li>-->
                 <li><a href="<?= base_url('/login')?>">Login</a></li>

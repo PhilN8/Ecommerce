@@ -91,6 +91,7 @@ img, video, svg, canvas, picture {
   .navbar {
     flex-direction: column;
     align-items: flex-start;
+    padding-block: 1em;
   }
 
   .navbar-links ul {

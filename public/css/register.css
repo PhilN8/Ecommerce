@@ -33,7 +33,6 @@ img, video, svg, canvas, picture {
   font-weight: 550;
   margin-inline-start: 2em;
   letter-spacing: 2px;
-
 }
 
 .navbar-links ul {
@@ -41,6 +40,7 @@ img, video, svg, canvas, picture {
   padding: 0;
   display: flex;
   background: black;
+  margin-inline-end: 2em;
 }
 
 .navbar-links li {
@@ -96,6 +96,7 @@ img, video, svg, canvas, picture {
   .navbar-links ul {
     width: 100%;
     flex-direction: column;
+    margin-inline-end: 0;
   }
 
   .navbar-links li {

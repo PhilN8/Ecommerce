@@ -5,38 +5,39 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <title>Home Page | Soko la Njue</title>
     <link rel="stylesheet" href="<?= base_url('/css/w3.css') ?>">
     <link rel="stylesheet" href="<?= base_url('/css/homepage.css') ?>">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato: 100,300,400,700|Luckiest+Guy|Oxygen:300,400" rel="stylesheet">
+    <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
     <script src="<?= base_url('/scripts/homepage.js') ?>"></script>
+    <style>
+        html,
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Lato", sans-serif;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- <nav class="w3-sidebar w3-bar-block w3-light-grey w3-card" style="width: 20%; float: left;">
-        <h5 class="w3-bar-item w3-black" style="margin-top: 0; margin-bottom: 0;">Users</h5>
-        <button class="w3-bar-item w3-button tablinks w3-blue" onclick="showSection(event, 'intro')">Home</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'history-section'); orderHistory()">History</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'pay-order-section');">Pay</button><br />
 
-        <h5 class="w3-bar-item w3-black" style="margin-top: 0; margin-bottom: 0;">Wallet</h5>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'wallet-section'); getAmount(<?= $_SESSION['id'] ?>)">Add to Wallet</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'view-products-section');">View Products</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'view-cart-section');">View Cart <span class="w3-orange w3-round w3-text-white" id="cart-count"><?php echo (count($_SESSION['orders']) > 0) ? count($_SESSION['orders']) : "" ?></span></button><br>
-
-        <a class="w3-bar-item w3-button w3-hover-red tablinks" href="<?= base_url('/logout') ?>">Logout</a>
-    </nav> -->
-
-    <header class="w3-top">
-        <h1 class="logo">Soko la Njue</h1>
-<!--        <img src="../img/logo2.png" alt="LOGO" class="logo">-->
-
-        <input type="checkbox" id="nav-toggle" class="nav-toggle">
-        <nav>
+    <nav class="navbar">
+        <div class="brand-title">Soko la Njue</div>
+        <a href="#" class="toggle-button">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </a>
+        <div class="navbar-links">
             <ul>
-                <!-- <li><button onclick="openSection('intro')">Intro</button></li> -->
                 <li><button onclick="openSection('wallet-section')">Wallet</button></li>
                 <li><button onclick="openSection('view-products-section')">Shop</button></li>
                 <li><button onclick="openSection('view-cart-section')">Cart</button></li>
@@ -44,11 +45,17 @@
                 <li><button onclick="openSection('history-section')">History</button></li>
                 <li><a href="<?= base_url('/logout') ?>">Logout</a></li>
             </ul>
-        </nav>
-        <label for="nav-toggle" class="nav-toggle-label">
-            <span></span>
-        </label>
-    </header>
+        </div>
+    </nav>
+
+    <script>
+        const toggleButton = document.getElementsByClassName('toggle-button')[0]
+        const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+
+        toggleButton.addEventListener('click', () => {
+            navbarLinks.classList.toggle('active')
+        })
+    </script>
 
     <main style="">
 
