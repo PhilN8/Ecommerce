@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\API_User;
+use App\Models\API_Token;
 use CodeIgniter\HTTP\ResponseInterface;
 use Exception;
 use ReflectionException;
@@ -32,7 +33,6 @@ class Auth extends BaseController
 
         $apiUser = new API_User();
         $apiUser->save($input);
-
 
         return $this
             ->getJWTForUser(
@@ -86,12 +86,24 @@ class Auth extends BaseController
 
             helper('jwt');
 
+            $new_token = getSignedJWTForUser($username);
+            $token = new API_Token();
+            $expiry = new \DateTime(date('Y-m-d H:i:s', $new_token[1]), new \DateTimeZone('Africa/Nairobi'));
+
+            $input = [
+                'api_userid' => $user['apiuser_id'],
+                'api_token' => $new_token[0],
+                'expires_on' => $expiry->format('Y-m-d H:i:s')
+            ];
+
+            $token->save($input);
+
             return $this
                 ->getResponse(
                     [
                         'message' => 'User authenticated successfully',
                         'user' => $user,
-                        'access_token' => getSignedJWTForUser($username)
+                        'access_token' => $new_token[0]
                     ]
                 );
         } catch (Exception $exception) {
