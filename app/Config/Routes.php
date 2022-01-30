@@ -51,6 +51,8 @@ $routes->get('/receipt/(:num)', 'Homepage::receipt/$1');
 $routes->get('users','Users::index');
 $routes->get('users/(:num)','Users::show/$1');
 $routes->get('users/email/(:any)','Users::email/$1');
+$routes->get('users/purchase/(:num)/(:any)','Users::purchaseByID/$1/$2');
+$routes->get('users/purchase/(.+)','Users::purchase/$1/$2$2');
 
 # API ROUTES === PRODUCTS
 $routes->get('products','Products::index');
