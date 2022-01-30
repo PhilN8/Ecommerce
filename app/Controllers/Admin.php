@@ -11,10 +11,10 @@ use App\Models\SubCategory;
 use App\Models\ProductImage;
 use App\Models\PaymentType;
 use App\Models\Order;
+use App\Models\API_User;
 
 class Admin extends BaseController
 {
-
 
     public function index()
     {
@@ -28,15 +28,11 @@ class Admin extends BaseController
 
     # USERS
 
-    public function viewUsers(int $role = null)
+    public function viewUsers(int $role = 3)
     {
         $users = new User();
 
-        $allUsers = $users->getUsers();
-
-        if ($role !== false)
-            $allUsers = $users->getUsers($role);
-
+        $allUsers = $users->getUsers($role);
 
         return $this->response->setJSON($allUsers);
     }
@@ -232,22 +228,6 @@ class Admin extends BaseController
             $product = new Product();
             $image = new ProductImage();
 
-            // echo "<pre>";
-            // print_r($_FILES);
-            // echo "</pre>";
-
-            // $file = $this->request->getFile("prod-image");
-
-            // if ($file != null)
-            //     $string = ['message' => "Works"];
-            // else
-            //     $string = ['message' => "Does not work"];
-
-            // return $this->response->setJSON($string);
-            // exit();
-
-            // $file = new \CodeIgniter\Files\File();
-
             $name = $this->request->getVar('productname');
             $sub_id = $this->request->getVar('subcategories');
             $desc = $this->request->getVar('productdesc');
@@ -287,8 +267,6 @@ class Admin extends BaseController
             }
 
             echo view('frontend/admin', $data);
-
-            // return $this->response->setJSON($string);
         }
     }
 
@@ -329,5 +307,18 @@ class Admin extends BaseController
         $order->updateOrder($order_id, 'pending payment');
 
         return $this->response->setJSON(["message" => "order updated"]);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function updateCategory(int $categoryID, string $newName)
+    {
+        $category = new Category();
+
+        $category
+            ->whereIn('category_id', [$categoryID])
+            ->set(['category_name' => $newName])
+            ->update();
     }
 }

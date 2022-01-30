@@ -115,6 +115,8 @@ class Homepage extends BaseController
                 $order_detail = new OrderDetails();
                 $product = new Product();
 
+                $ready = [];
+                $ready_quantity = [];
                 $outOfStock = [];
 
                 $count = count($_SESSION['orders']);
@@ -133,25 +135,39 @@ class Homepage extends BaseController
 
                 if ($this->validate($rules)) {
 
-                    $details = [
-                        "customer_id" => $_SESSION['id'],
-                        'payment_type' => $pay,
-                    ];
-
-                    $total_cost = 0;
-
-                    $order_id = $order->newOrder($details);
-
                     for ($i = 1; $i <= $count; $i++) {
-                        $product_id = $_SESSION['orders'][$i - 1];
-                        $price = $product->getPrice($product_id);
-                        $quantity = $_POST['order' . $i];
+                        $check_product_id = $_SESSION['orders'][$i - 1];
+                        $check_quantity = $_POST['order' . $i];
+                        $check = $product->checkQuantity($check_product_id, $check_quantity);
 
-                        $check = $product->checkQuantity($product_id, $quantity);
+                        if ($check == false) {
+                            $notAdded = $product->find($check_product_id)['product_name'];
+                            $outOfStock[] = $check_product_id. ' : '. $notAdded;
+                        } else {
+                            $key = array_search($check_product_id, $_SESSION['orders']);
+                            array_splice($_SESSION['orders'], $key, 1);
+                            $ready[] = $check_product_id;
+                            $ready_quantity[] = $check_quantity;
+                            $count -= 1;
+                        }
+                    }
 
-                        if ($check == true) {
+                    if (count($ready) > 0) {
+                        $details = [
+                            "customer_id" => $_SESSION['id'],
+                            'payment_type' => $pay,
+                        ];
+
+                        $total_cost = 0;
+
+                        $order_id = $order->newOrder($details);
+
+                        for ($i = 0; $i < count($ready); $i++) {
+                            $product_id = $ready[$i];
+                            $price = $product->getPrice($product_id);
+                            $quantity = $ready_quantity[$i];
+
                             $cost = $price * $quantity;
-
                             $total_cost += $cost;
 
                             $product->updateQuantity($product_id, -$quantity);
@@ -165,20 +181,21 @@ class Homepage extends BaseController
                             ];
 
                             $order_detail->newOrderDetail($new_order);
-                        } else {
-                            $notAdded = $product->find($product_id)['product_name'];
-                            $outOfStock[] = $product_id. ' : '. $notAdded;
                         }
 
-
+                        $order->updateTotal($order_id, $total_cost);
                     }
 
-                    $order->updateTotal($order_id, $total_cost);
-                    $_SESSION['orders'] = [];
+                    if($count == count($ready)) {
+                        $data['complete'] = 1;
+                        $_SESSION['orders'] = [];
+                    } else if (count($ready) > 0) {
+                        $data['check'] = $outOfStock;
+                        $data['count'] = count($outOfStock);
+                    } else {
+                        $data['none'] = 1;
+                    }
 
-                    $data['complete'] = 1;
-                    $data['check'] = $outOfStock;
-                    $data['count'] = count($outOfStock);
                     echo view('frontend/homepage', $data);
                 } else {
                     $data['incomplete'] = 1;

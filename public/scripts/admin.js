@@ -5,12 +5,31 @@ $(function() {
             $.each(result, function(x, i) {
                 $('#categories-dropdown').append('<option value="' + i.category_id + '" >' + i.category_name + '</option>');
                 $('#category-dropdown').append('<option value="' + i.category_id + '" >' + i.category_name + '</option>');
+                $('#all-categories').append('<option value="' + i.category_id + '" >' + i.category_name + '</option>');
             })
         }
     });
 
     orders()
 });
+
+function getCategories() {
+    $('#categories-dropdown').empty()
+    $('#category-dropdown').empty()
+    $('#all-categories').empty()
+
+
+    $.ajax({
+        url: "http://localhost:8080/Admin/getCategories",
+        success: function(result) {
+            $.each(result, function(x, i) {
+                $('#categories-dropdown').append('<option value="' + i.category_id + '" >' + i.category_name + '</option>');
+                $('#category-dropdown').append('<option value="' + i.category_id + '" >' + i.category_name + '</option>');
+                $('#all-categories').append('<option value="' + i.category_id + '" >' + i.category_name + '</option>');
+            })
+        }
+    });
+}
 
 function showSection(event, section) {
     var i, x, tablinks
@@ -19,11 +38,19 @@ function showSection(event, section) {
         x[i].style.display = 'none'
 
     tablinks = document.getElementsByClassName('tablinks')
-    for (i = 0; i < x.length; i++)
+    for (i = 0; i < tablinks.length; i++)
         tablinks[i].className = tablinks[i].className.replace(' w3-blue', "");
 
     document.getElementById(section).style.display = "block"
     event.currentTarget.className += " w3-blue"
+}
+
+function activeButton(event) {
+    var x = document.getElementsByClassName('view-users')
+    for (i = 0; i < x.length; i++)
+        x[i].className = x[i].className.replace(' btn-active', '')
+
+    event.currentTarget.className += ' btn-active'
 }
 
 function registerAdmin() {
@@ -141,9 +168,10 @@ function loadTable(role, place) {
     $('#all-users').empty()
     $('#users').hide()
     $('#users-table').hide().empty()
+
     $(function() {
         $.ajax({
-            url: "http://localhost:8080/Admin/viewUsers" + "/" + role,
+            url: `http://localhost:8080/Admin/viewUsers/${role}`,
             success: function(result) {
                 $.each(result, function(x, i) {
                     if (place == 0){
@@ -174,7 +202,7 @@ function loadSubs() {
     });
 }
 
-function changeOpt() {
+function changeOption() {
     var option = $('#edit-option').val()
 
     if (option == 'gender') {
@@ -354,4 +382,33 @@ function updateOrder(id) {
             $('#order-fail-msg').val('Order of ID' + id + ' Not Updated')
         }
     })
+}
+
+function editCategory() {
+    var name = $('#new-category').val().trim()
+    var id = $('#all-categories').val()
+
+    name = name.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+        return letter.toUpperCase()
+    });
+
+    $('#new-category-result').hide()
+    $('#category-update').hide()
+    $('#category-fail').hide()
+
+    if (name == '') return;
+
+    $.ajax({
+        url: `http://localhost:8080/Admin/updateCategory/${id}/${name}`,
+        success: function(result){
+            $('#category-update').show()
+            getCategories()
+            $('#new-category').val('')
+        },
+        error: function(result) {
+            console.log(result)
+            $('#category-fail').show()
+        }
+    })
+
 }

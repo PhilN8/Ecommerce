@@ -23,12 +23,12 @@ class User extends Model
     protected $useSoftDeletes = true;
     protected $deletedField = 'is_deleted';
 
-    public function getUsers(int $role = null)
+    public function getUsers(int $role = 3)
     {
 
-        if ($role === null || $role == 0)
+        if ($role == 3)
             return $this->select('user_id, first_name, last_name, email')
-                ->findAll();
+                ->get()->getResultArray();
 
 
         return $this->select('user_id, first_name, last_name, email')

@@ -75,13 +75,21 @@
         <?php endif; ?>
 
         <?php if (isset($check) and isset($count)) :  ?>
-            <div class="w3-section w3-center w3-container w3-yellow w3-display-container" style="width: 80%; margin: auto;">
+            <div class="w3-section w3-center w3-container w3-blue w3-display-container" style="width: 80%; margin: auto;">
                 <span onclick="this.parentElement.style.display='none';" class="w3-button w3-large w3-display-topright">&times;</span>
-                <h1>Incomplete Orders</h1>
+                <h1>Order Partially Completed</h1>
                 <p>The following items are out of stock:</p>
                 <?php for($i = 0; $i < $count; $i++) {
                     echo '<p>'. $check[$i]. ' </p>';
-                 } ?>
+                 }?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($none)) :  ?>
+            <div class="w3-section w3-center w3-container w3-yellow w3-display-container" style="width: 80%; margin: auto;">
+                <span onclick="this.parentElement.style.display='none';" class="w3-button w3-large w3-display-topright">&times;</span>
+                <h1>Order Not Completed</h1>
+                <p>All items chosen are currently out of stock</p>
             </div>
         <?php endif; ?>
 
