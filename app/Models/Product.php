@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use ReflectionException;
 
 class Product extends Model
 {
@@ -58,5 +59,39 @@ class Product extends Model
     {
 
         return $this->select('unit_price')->where(['product_id' => $id])->first()['unit_price'];
+    }
+
+    /**
+     * Checks available quantity of products
+     * @param int $product_id
+     * @param int $request
+     * @return bool
+     */
+    public function checkQuantity(int $product_id, int $request): bool
+    {
+        $actual = $this->select('available_quantity')
+            ->where(['product_id' => $product_id])
+            ->first()['available_quantity'];
+
+        if ($actual < $request)
+            return false;
+
+        return true;
+    }
+
+    /**
+     * Updates available quantity of product
+     * @param int $product_id
+     * @param int $deduction
+     * @throws ReflectionException
+     */
+    public function updateQuantity(int $product_id, int $deduction) {
+        $current = $this->select('available_quantity')
+            ->where(['product_id' => $product_id])
+            ->first()['available_quantity'];
+
+        $new = $current + $deduction;
+
+        $this->update($product_id, ['available_quantity' => $new]);
     }
 }

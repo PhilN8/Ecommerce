@@ -11,7 +11,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css?family=Lato: 100,300,400,700|Luckiest+Guy|Oxygen:300,400" rel="stylesheet">
-    <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
     <script src="<?= base_url('/scripts/homepage.js') ?>"></script>
     <style>
         html,
@@ -62,6 +61,7 @@
         <?php if (isset($delete)) :  ?>
             <div class="w3-section w3-center w3-container w3-blue w3-display-container" style="width: 80%; margin: auto">
                 <span onclick="this.parentElement.style.display='none';" class="w3-button w3-large w3-display-topright">&times;</span>
+                <h1>Removed</h1>
                 <p>Product Removed from Cart...</p>
             </div>
         <?php endif; ?>
@@ -71,6 +71,17 @@
                 <span onclick="this.parentElement.style.display='none';" class="w3-button w3-large w3-display-topright">&times;</span>
                 <h1>Order Completed!</h1>
                 <p>Thank you for shopping with us!</p>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($check) and isset($count)) :  ?>
+            <div class="w3-section w3-center w3-container w3-yellow w3-display-container" style="width: 80%; margin: auto;">
+                <span onclick="this.parentElement.style.display='none';" class="w3-button w3-large w3-display-topright">&times;</span>
+                <h1>Incomplete Orders</h1>
+                <p>The following items are out of stock:</p>
+                <?php for($i = 0; $i < $count; $i++) {
+                    echo '<p>'. $check[$i]. ' </p>';
+                 } ?>
             </div>
         <?php endif; ?>
 
@@ -132,12 +143,9 @@
 
             <p hidden id="product-result" class="w3-text-red"></p>
 
-<!--            <div class="w3-row-padding" id="product-images">-->
-                <!-- LOAD PRODUCT IMAGES HERE -->
-<!--            </div>-->
 
             <div class="small-container" id="product-images">
-<!--             LOAD PRODUCT IMAGES HERE -->
+                <!-- LOAD PRODUCT IMAGES HERE -->
             </div>
         </section>
 

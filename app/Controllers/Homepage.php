@@ -2,8 +2,6 @@
 
 namespace App\Controllers;
 
-// namespace App\Libraries;
-
 use App\Models\SubCategory;
 use App\Models\Wallet;
 use App\Models\Category;
@@ -11,7 +9,7 @@ use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderDetails;
 use App\Models\PaymentType;
-
+use CodeIgniter\HTTP\ResponseInterface;
 use PDF;
 
 class Homepage extends BaseController
@@ -117,6 +115,8 @@ class Homepage extends BaseController
                 $order_detail = new OrderDetails();
                 $product = new Product();
 
+                $outOfStock = [];
+
                 $count = count($_SESSION['orders']);
                 $pay = intval($this->request->getVar('pay-type'));
 
@@ -144,27 +144,41 @@ class Homepage extends BaseController
 
                     for ($i = 1; $i <= $count; $i++) {
                         $product_id = $_SESSION['orders'][$i - 1];
-                        $price = $product->getPrice($_SESSION['orders'][$i - 1]);
+                        $price = $product->getPrice($product_id);
                         $quantity = $_POST['order' . $i];
-                        $cost = $price * $quantity;
 
-                        $total_cost += $cost;
+                        $check = $product->checkQuantity($product_id, $quantity);
 
-                        $new_order = [
-                            'order_id' => $order_id,
-                            'product_id' => $product_id,
-                            'product_price' => $price,
-                            'order_quantity' => $quantity,
-                            'orderdetails_total' => $cost
-                        ];
+                        if ($check == true) {
+                            $cost = $price * $quantity;
 
-                        $order_detail->newOrderDetail($new_order);
+                            $total_cost += $cost;
+
+                            $product->updateQuantity($product_id, -$quantity);
+
+                            $new_order = [
+                                'order_id' => $order_id,
+                                'product_id' => $product_id,
+                                'product_price' => $price,
+                                'order_quantity' => $quantity,
+                                'orderdetails_total' => $cost
+                            ];
+
+                            $order_detail->newOrderDetail($new_order);
+                        } else {
+                            $notAdded = $product->find($product_id)['product_name'];
+                            $outOfStock[] = $product_id. ' : '. $notAdded;
+                        }
+
+
                     }
 
                     $order->updateTotal($order_id, $total_cost);
                     $_SESSION['orders'] = [];
 
                     $data['complete'] = 1;
+                    $data['check'] = $outOfStock;
+                    $data['count'] = count($outOfStock);
                     echo view('frontend/homepage', $data);
                 } else {
                     $data['incomplete'] = 1;
@@ -211,7 +225,7 @@ class Homepage extends BaseController
         return $this->response->setJSON(['message' => 2]);
     }
 
-    public function getPaymentTypes()
+    public function getPaymentTypes(): ResponseInterface
     {
         $payment = new PaymentType();
         return $this->response->setJSON($payment->paymentTypes());
@@ -228,19 +242,15 @@ class Homepage extends BaseController
         $orderDetails = new OrderDetails();
         $details = $orderDetails->receipt($order_id);
 
-        // return $this->response->setJSON($details);
-
         $pdf = new PDF();
         $pdf->AddPage();
         $pdf->AliasNbPages();
         $pdf->SetFont('Arial', 'B', 16);
         $pdf->Cell(40, 10, 'User ID: ' . $_SESSION['id']);
         $pdf->Cell(40, 10, 'Name: ' . $_SESSION['name']);
-        // $pdf->Cell(40, 10, 'ID: ' . $receipt['order_id']);
-        // $pdf->Cell(40, 10, 'ID: ' . $receipt['order_id']);
+
         $pdf->Ln();
         $pdf->Ln();
-        // $pdf->Cell(40, 10, 'Order');
 
         $pdf->Cell(40, 10, 'Order ID: ' . $receipt['order_id']);
         $pdf->Ln();
