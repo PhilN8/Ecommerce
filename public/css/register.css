@@ -7,9 +7,19 @@ body {
   padding: 0;
 }
 
-img, video, svg, canvas, picture {
+img,
+video,
+svg,
+canvas,
+picture {
   max-width: 100%;
   display: block;
+}
+
+.container {
+  margin: 0 auto;
+  width: 85%;
+  max-width: 700px;
 }
 
 /* ======= NAVBAR ======= */

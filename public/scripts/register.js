@@ -1,9 +1,11 @@
-function registerUser() {
-    var fname = $("#first-name").val();
-    var lname = $("#last-name").val();
-    var email = $('#emailaddress').val();
-    var pass1 = $("#password1").val();
-    var pass2 = $("#password2").val();
+$('#regForm').submit(function(event) {
+    event.preventDefault();
+
+    var fname = $("#first-name").val().trim();
+    var lname = $("#last-name").val().trim();
+    var email = $('#emailaddress').val().trim();
+    var pass1 = $("#password1").val().trim();
+    var pass2 = $("#password2").val().trim();
     var gender = $('#genders').val();
 
     $("#fNameResult").hide();
@@ -35,20 +37,34 @@ function registerUser() {
         return;
     }
 
+    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+
+    if (!email.match(mailformat)) {
+        $("#emailResult").show().text("* Enter a valid email address: example@gmail.com");
+        return;
+    }
+
     $.ajax({
-        url: 'http://localhost:8080/regCheck/' + email + '/' + fname + '/' + lname + '/' + pass1 + '/' + gender,
+        type: 'POST',
+        url: 'http://localhost:8080/Registration/register',
+        data: {
+            'first-name': fname,
+            'last-name': lname,
+            'email': email,
+            'password1': pass1,
+            'gender': gender
+        },
         success: function(result) {
-            console.log(result, result.message)
-            if (result.message == 'Registration Failed')
-                $('#reg-failed-msg').show();
-            else if (result.message == 'Not a valid email')
-                $('#emailResult').show().text("* " + result.message)
-            else if (result.message == 'Email already exists')
+            if (result.message == 'Email already exists')
                 $('#email-msg').show()
-            else {
-                window.location.href = "http://localhost:8080/homepage";
-            }
+            else if (result.message == 'Registration Failed')
+                $('#reg-failed-msg').show()
+            else
+                window.location.href = "http://localhost:8080/homepage"
+        },
+        error: function() {
+            $('#reg-failed-msg').show()
 
         }
     })
-}
+})
