@@ -56,7 +56,7 @@
         })
     </script>
 
-    <main style="">
+    <main>
 
         <?php if (isset($delete)) :  ?>
             <div class="w3-section w3-center w3-container w3-blue w3-display-container" style="width: 80%; margin: auto">
@@ -66,7 +66,7 @@
             </div>
         <?php endif; ?>
 
-        <?php if (isset($complete)) :  ?>
+        <?php if (isset($_SESSION['complete'])) :  ?>
             <div class="w3-section w3-center w3-container w3-green w3-display-container" style="width: 80%; margin: auto;">
                 <span onclick="this.parentElement.style.display='none';" class="w3-button w3-large w3-display-topright">&times;</span>
                 <h1>Order Completed!</h1>
@@ -74,18 +74,18 @@
             </div>
         <?php endif; ?>
 
-        <?php if (isset($check) and isset($count)) :  ?>
+        <?php if (isset($_SESSION['check']) and isset($_SESSION['count'])) :  ?>
             <div class="w3-section w3-center w3-container w3-blue w3-display-container" style="width: 80%; margin: auto;">
                 <span onclick="this.parentElement.style.display='none';" class="w3-button w3-large w3-display-topright">&times;</span>
                 <h1>Order Partially Completed</h1>
                 <p>The following items are currently less than quantity requested:</p>
-                <?php for($i = 0; $i < $count; $i++) {
-                    echo '<p>'. $check[$i]. ' </p>';
-                 }?>
+                <?php for ($i = 0; $i < $count; $i++) {
+                    echo '<p>' . $check[$i] . ' </p>';
+                } ?>
             </div>
         <?php endif; ?>
 
-        <?php if (isset($none)) :  ?>
+        <?php if (isset($_SESSION['none'])) :  ?>
             <div class="w3-section w3-center w3-container w3-yellow w3-display-container" style="width: 80%; margin: auto;">
                 <span onclick="this.parentElement.style.display='none';" class="w3-button w3-large w3-display-topright">&times;</span>
                 <h1>Order Not Completed</h1>
@@ -93,7 +93,8 @@
             </div>
         <?php endif; ?>
 
-        <?php if (isset($incomplete) && isset($validation)) :  ?>
+        <?php session();
+        if (isset($_SESSION['incomplete']) && isset($_SESSION['validation'])) :  ?>
             <div class="w3-section w3-center w3-container w3-amber w3-display-container" style="width: 80%; margin: auto;">
                 <span onclick="this.parentElement.style.display='none';" class="w3-button w3-large w3-display-topright">&times;</span>
                 <h2>No Payment Type</h2>
@@ -217,7 +218,7 @@
         </section>
 
         <section id="history-section" class="home-section w3-animate-opacity" style="width: 80%; margin: auto; display: none;">
-            <h1  class="section_titles">History of Orders</h1>
+            <h1 class="section_titles">History of Orders</h1>
 
             <table>
                 <thead>

@@ -49,7 +49,7 @@ ini_set('display_errors', '1');
 
         <h5 class="w3-bar-item w3-black" style="margin-top: 0; margin-bottom: 0;">View</h5>
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'view-users-section'); loadTable(3, 0)">Users</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event,'order-section')">Orders</button><br/>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event,'order-section')">Orders</button><br />
 
 
         <h5 class="w3-bar-item w3-black" style="margin-bottom: 0;">Add</h5>
@@ -57,7 +57,7 @@ ini_set('display_errors', '1');
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'category-section')">Category</button>
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'sub-category-section')">Sub-Category</button>
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'product-section'); loadSubs()">Product</button>
-        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'payment-section'); loadSubs()">Payment Type</button><br/>
+        <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'payment-section'); loadSubs()">Payment Type</button><br />
 
         <h5 class="w3-bar-item w3-black" style="margin-bottom: 0;">Edit</h5>
         <button class="w3-bar-item w3-button tablinks" onclick="showSection(event, 'edit-users-section'); loadTable(0, 1)">Users</button>
@@ -68,8 +68,10 @@ ini_set('display_errors', '1');
     </nav>
 
     <main style="width: 80%; float: right;">
-
-        <?php if (isset($validation)) :  ?>
+        <?php print_r($_SESSION); ?>
+        <?php if (isset($_SESSION['validation'])) :
+            $validation = $_SESSION['validation'];
+            print_r($_SESSION); ?>
             <div class="w3-section w3-center w3-container w3-red w3-display-container">
                 <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
                 <?= $validation->listErrors() ?>
@@ -214,7 +216,7 @@ ini_set('display_errors', '1');
             <h1>Edit Users</h1>
             <form action="" id="editForm">
                 <label for="edit-user">Choose User</label>
-                <input type="text" class="w3-input" list="all-users" id="edit-user" onkeyup=""7>
+                <input type="text" class="w3-input" list="all-users" id="edit-user" onkeyup="" 7>
                 <datalist id="all-users"></datalist>
                 <p id="user-result" class="w3-margin-bottom w3-text-red" hidden style="margin-top: 0;"></p><br>
 
@@ -362,7 +364,7 @@ ini_set('display_errors', '1');
             <label for="all-categories">Choose category:</label>
             <select id="all-categories" class="w3-input">
 
-            </select><br/>
+            </select><br />
 
             <label for="new-category">Enter a new name:</label>
             <input type="text" id="new-category" class="w3-input">

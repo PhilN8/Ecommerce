@@ -32,6 +32,7 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
+$routes->get('/shop', 'Home::shop');
 $routes->get('/login', 'Login::index');
 $routes->get('/logout', 'Login::logout');
 $routes->get('/register', 'Registration::index');
@@ -48,24 +49,24 @@ $routes->get('/receipt/(:num)', 'Homepage::receipt/$1');
 // $routes->match(['get', 'post'], 'frontend/login', 'Form::index');
 
 # API ROUTES === USERS
-$routes->get('users','Users::index');
-$routes->get('users/(:num)','Users::show/$1');
-$routes->get('users/email/(:any)','Users::email/$1');
-$routes->get('users/purchase/(:num)/(:any)','Users::purchaseByID/$1/$2');
-$routes->get('users/purchase/(.+)','Users::purchase/$1/$2$2');
+$routes->get('users', 'Users::index');
+$routes->get('users/(:num)', 'Users::show/$1');
+$routes->get('users/email/(:any)', 'Users::email/$1');
+$routes->get('users/purchase/(:num)/(:any)', 'Users::purchaseByID/$1/$2');
+$routes->get('users/purchase/(.+)', 'Users::purchase/$1/$2$2');
 
 # API ROUTES === PRODUCTS
-$routes->get('products','Products::index');
-$routes->get('products/(:num)','Products::show/$1');
-$routes->get('products/sales/(:any)','Products::sales/$1');
-$routes->get('products/search/(:any)','Products::deepSearch/$1');
-$routes->get('products/(.+)','Products::search/$1/$2');
+$routes->get('products', 'Products::index');
+$routes->get('products/(:num)', 'Products::show/$1');
+$routes->get('products/sales/(:any)', 'Products::sales/$1');
+$routes->get('products/search/(:any)', 'Products::deepSearch/$1');
+$routes->get('products/(.+)', 'Products::search/$1/$2');
 
 # API ROUTES === TRANSACTIONS
-$routes->get('transactions','Transactions::index');
-$routes->get('transactions/(:num)','Transactions::show/$1');
-$routes->get('transactions/dates/(.+)','Transactions::dates/$1/$2');
-$routes->get('transactions/(.+)','Transactions::search/$1/$2');
+$routes->get('transactions', 'Transactions::index');
+$routes->get('transactions/(:num)', 'Transactions::show/$1');
+$routes->get('transactions/dates/(.+)', 'Transactions::dates/$1/$2');
+$routes->get('transactions/(.+)', 'Transactions::search/$1/$2');
 
 
 /*

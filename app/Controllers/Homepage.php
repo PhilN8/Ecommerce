@@ -142,7 +142,7 @@ class Homepage extends BaseController
 
                         if ($check == false) {
                             $notAdded = $product->find($check_product_id)['product_name'];
-                            $outOfStock[] = $check_product_id. ' : '. $notAdded;
+                            $outOfStock[] = $check_product_id . ' : ' . $notAdded;
                         } else {
                             $key = array_search($check_product_id, $_SESSION['orders']);
                             array_splice($_SESSION['orders'], $key, 1);
@@ -186,21 +186,28 @@ class Homepage extends BaseController
                         $order->updateTotal($order_id, $total_cost);
                     }
 
-                    if($count == count($ready)) {
-                        $data['complete'] = 1;
+                    if ($count == count($ready)) {
+                        $_SESSION['complete'] = 1;
+                        session()->markAsFlashdata('complete');
+
                         $_SESSION['orders'] = [];
                     } else if (count($ready) > 0) {
-                        $data['check'] = $outOfStock;
-                        $data['count'] = count($outOfStock);
+                        $_SESSION['check'] = $outOfStock;
+                        $_SESSION['count'] = count($outOfStock);
+
+                        session()->markAsFlashdata(['check', 'count']);
                     } else {
-                        $data['none'] = 1;
+                        $_SESSION['none'] = 1;
+                        session()->markAsFlashdata('none');
                     }
 
-                    echo view('frontend/homepage', $data);
+                    return $this->response->redirect(base_url('homepage'));
                 } else {
-                    $data['incomplete'] = 1;
-                    $data['validation'] = $this->validator;
-                    echo view('frontend/homepage', $data);
+                    $_SESSION['incomplete'] = 1;
+                    $_SESSION['validation'] = $this->validator;
+                    session()->markAsFlashdata(['incomplete', 'validation']);
+
+                    return $this->response->redirect(base_url('homepage'));
                 }
             }
 

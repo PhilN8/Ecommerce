@@ -24,7 +24,6 @@ class Login extends BaseController
             $user->logout($_SESSION['login_id']);
         }
         session_destroy();
-
         $data['logout'] = 1;
         echo view('/frontend/login', $data);
     }
@@ -84,5 +83,11 @@ class Login extends BaseController
         }
 
         return $this->response->setJSON($string);
+    }
+
+    private function noData()
+    {
+        session()->set('logout', 'hello');
+        session_destroy();
     }
 }

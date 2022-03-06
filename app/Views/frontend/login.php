@@ -34,11 +34,13 @@
         </a>
         <div class="navbar-links">
             <ul>
-                <li><a href="<?= base_url('/')?>">Home</a></li>
+                <li><a href="<?= base_url('/') ?>">Home</a></li>
                 <!--                <li><a href="#">About</a></li>-->
                 <!--                <li><a href="#">Contact</a></li>-->
-<!--                <li><a href="--><?//= base_url('/login')?><!--">Login</a></li>-->
-                <li><a href="<?= base_url('/register')?>">Sign Up</a></li>
+                <!--                <li><a href="--><? //= base_url('/login')
+                                                    ?>
+                <!--">Login</a></li>-->
+                <li><a href="<?= base_url('/register') ?>">Sign Up</a></li>
             </ul>
         </div>
     </nav>
@@ -63,9 +65,8 @@
             </div>
         <?php endif ?>
 
-
         <?php
-        if (isset($logout)) : ?>
+        if (isset($_SESSION['logout'])) : ?>
             <div class="w3-display-container w3-container w3-green w3-section">
                 <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
                 <h3>Success</h3>

@@ -178,7 +178,7 @@ class Admin extends BaseController
 
     # PRODUCTS
 
-    public function newProduct(string $name = null, string $desc = null, int $sub_id = null, $price = null)
+    public function newProduct()
     {
         session();
         helper(['form']);
@@ -220,9 +220,15 @@ class Admin extends BaseController
                     $file->move('./images/database', $file->getRandomName());
                 }
             } else {
-                $data['validation'] = $this->validator;
-                echo view('/frontend/admin', $data);
-                exit();
+                // $data['validation'] = $this->validator;
+                $_SESSION['validation'] = $this->validator;
+                session()->markAsFlashdata('validation');
+                session()->set('hello', 'world');
+                session()->markAsFlashdata('hello');
+
+                return $this->response->redirect(base_url('admin'));
+
+                // echo view('/frontend/admin', $data);
             }
 
             $product = new Product();
@@ -293,7 +299,8 @@ class Admin extends BaseController
 
     # ORDERS
 
-    public function orders() {
+    public function orders()
+    {
         $order =  new Order();
 
         $all_orders = $order->history();
@@ -301,7 +308,8 @@ class Admin extends BaseController
         return $this->response->setJSON($all_orders);
     }
 
-    public function updateOrder(int $order_id) {
+    public function updateOrder(int $order_id)
+    {
         $order = new Order();
 
         $order->updateOrder($order_id, 'pending payment');

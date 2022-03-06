@@ -222,6 +222,7 @@ class Users extends BaseController
             return $this->getResponse(
                 [
                     'message' => 'No Records found',
+                    'sql' => $sql
                 ],
                 ResponseInterface::HTTP_NOT_FOUND
             );

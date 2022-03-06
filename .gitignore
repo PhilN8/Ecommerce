@@ -128,3 +128,5 @@ nb-configuration.xml
 # Conn to DB
 
 EcommerceConn.session.sql
+
+venv/

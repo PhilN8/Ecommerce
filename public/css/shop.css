@@ -45,6 +45,11 @@ picture {
   text-align: center;
   line-height: 1.1;
   font-size: 1.5rem;
+  padding: 0.25em;
+}
+
+.pets-header {
+  margin-block: 3em;
 }
 
 .main-header__title,
@@ -89,6 +94,7 @@ picture {
 }
 
 .footer {
+  margin-top: 1.5em;
   background-color: #000;
   color: white;
   padding: 1em;
@@ -199,12 +205,11 @@ picture {
   .flex {
     display: flex;
     flex-wrap: wrap;
-    /* gap: 2em; */
+    gap: 1.5em;
     justify-content: space-around;
   }
 
   .product {
     flex-grow: 1;
-    /* width: 100%; */
   }
 }
