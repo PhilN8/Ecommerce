@@ -99,7 +99,7 @@ function getProducts() {
         url: 'http://localhost:8080/Homepage/getProducts/' + sub_id,
         success: function(result) {
             $.each(result, function(x, i) {
-                $('#product-list').append('<option value=' + i.product_id + '>' + i.product_name + ' - ' + i.unit_price + '</option>')
+                $('#product-list').append(`<option value='${i.product_id}'> ${i.product_name} -  ${i.unit_price}</option>`)
                 if (i.product_image == null)
                     source = '';
                 else

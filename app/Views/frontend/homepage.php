@@ -103,7 +103,7 @@
         <?php endif; ?>
 
         <section id="intro" class="home-section w3-animate-opacity" style="width: 80%; margin: auto;">
-            <h1>Home Page</h1>
+            <h1 class="main_title">Home Page</h1>
             <p>Welcome back, <?= $_SESSION['name'] ?></p>
         </section>
 

@@ -68,7 +68,6 @@ ini_set('display_errors', '1');
     </nav>
 
     <main style="width: 80%; float: right;">
-        <?php print_r($_SESSION); ?>
         <?php if (isset($_SESSION['validation'])) :
             $validation = $_SESSION['validation'];
             print_r($_SESSION); ?>
